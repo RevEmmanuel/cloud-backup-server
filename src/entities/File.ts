@@ -1,4 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from 'typeorm';
+import {User} from "./User";
 
 @Entity()
 export class File {
@@ -16,11 +17,13 @@ export class File {
     })
     'fileUrl': string;
 
+    @Column()
+    'originalFileName': string;
+
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     'dateUploaded': Date;
 
-
-    @ManyToOne(() => User, (user) => user.photos)
-    user: User
+    @ManyToOne(() => User)
+    'user': User
 
 }
