@@ -22,22 +22,29 @@ verificationRouter.get('/:otp', async (req, res) => {
 
     const otpRepository = myDataSource.getRepository(VerificationOtp);
     const foundOtp = await otpRepository.findOne({ where: { otp } });
-    if (!await verifyOTP(foundOtp)) {
-        await otpRepository.delete({ otp: foundOtp?.otp });
-        res.send('Invalid or expired OTP.');
+    if (foundOtp === null) {
+        res.status(401).json({ message: 'Invalid or expired OTP.' });
+        return;
     }
-    const email = foundOtp?.ownerEmail;
+    if (!await verifyOTP(foundOtp)) {
+        console.log("1");
+        await otpRepository.delete({ otp: foundOtp?.otp });
+        console.log("2");
+        res.status(401).json({ message: 'Invalid or expired OTP.' });
+        return;
+    }
+    const email = foundOtp.ownerEmail;
 
     const userRepository = myDataSource.getRepository(User);
     const user = await userRepository.findOne({ where: { email } });
 
-    // @ts-ignore
+    if (user === null) {
+        res.status(500).json({ message: 'An error occured' });
+        return;
+    }
     user.isVerified = true;
-    // @ts-ignore
     await userRepository.save(user);
-    // @ts-ignore
     await otpRepository.delete({ otp: foundOtp.otp });
-    // @ts-ignore
     const fullName = user.fullName;
 
 
@@ -48,7 +55,7 @@ verificationRouter.get('/:otp', async (req, res) => {
         html: `
         <h1>Hi, ${fullName}!</h1>
         <h1>Your account has been successfully verified</h1>
-        <p>Enjoy your amazing features!</p>
+        <p>Enjoy our amazing features!</p>
         <p>Again, We're glad to have you!</p>
         `
     };

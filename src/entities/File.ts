@@ -26,4 +26,7 @@ export class File {
     @ManyToOne(() => User)
     'user': User
 
+    @Column()
+    'fileType': string;
+
 }
