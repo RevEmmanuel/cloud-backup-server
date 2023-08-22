@@ -20,7 +20,16 @@ const authVerification = (req: any, res: any, next: any) => {
     })
 }
 
-module.exports = authVerification;
+const adminVerification = (req: any, res: any, next: any) => {
+    authVerification(req, res, next);
+    const user = req.user;
+    if (user && user.role === 'admin') {
+        next();
+    } else {
+        res.status(403).json({ message: 'Permission denied' });
+    }
+};
+
 function extractTokenFromRequest(req: any) {
     const authHeader = req.headers['authorization'];
     if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -29,3 +38,5 @@ function extractTokenFromRequest(req: any) {
     return null;
 }
 
+module.exports = authVerification;
+module.exports = adminVerification;

@@ -16,7 +16,13 @@ export class User {
     @Column()
     'fullName': string;
 
-    @Column()
+    @Column({ default: false })
     'isVerified': boolean;
+
+    @Column()
+    'role': string;
+
+    @Column({ default: false })
+    'isDeleted': boolean;
 
 }

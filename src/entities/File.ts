@@ -1,5 +1,6 @@
 import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from 'typeorm';
 import {User} from "./User";
+import {Folder} from "./Folder";
 
 @Entity()
 export class File {
@@ -24,9 +25,15 @@ export class File {
     'dateUploaded': Date;
 
     @ManyToOne(() => User)
-    'user': User
+    'user': User;
 
     @Column()
     'fileType': string;
+
+    @ManyToOne(() => Folder)
+    'folder': Folder;
+
+    @Column({ default: false })
+    'isUnsafe': boolean;
 
 }

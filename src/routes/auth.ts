@@ -1,6 +1,6 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import bcrypt from 'bcrypt';
-import { User } from '../entities/User';
+import {User} from '../entities/User';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import {myDataSource} from "../database";
@@ -53,13 +53,13 @@ authRouter.post('/signup', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const isVerified = false;
+    const role = 'USER';
 
     const newUser = userRepository.create({
         email,
         password: hashedPassword,
         fullName,
-        isVerified,
+        role,
     });
 
     await userRepository.save(newUser);
@@ -111,8 +111,13 @@ authRouter.post('/login', async (req, res) => {
 
     const userRepository = myDataSource.getRepository(User);
     const user = await userRepository.findOne({ where: { email } });
+
     if (!user) {
         return res.status(401).json({ message: `User with email ${email} not found!` });
+    }
+
+    if (user.isDeleted) {
+        return res.status(401).json({ message: 'Account does not exist!' });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -126,6 +131,57 @@ authRouter.post('/login', async (req, res) => {
 
     const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '24h' });
     res.json({ token });
+});
+
+authRouter.delete('/delete', async (req: any, res) => {
+    const { id, password } = req.body;
+    const userMakingRequest = req.user;
+
+    if (!id) {
+        return res.status(400).json({ message: 'Missing field' });
+    }
+    if (!password) {
+        return res.status(400).json({ message: 'Missing Password field' });
+    }
+
+    const userRepository = myDataSource.getRepository(User);
+    const user = await userRepository.findOne(id);
+    if (!user) {
+        return res.status(401).json({ message: `User not found!` });
+    }
+    if (user !== userMakingRequest) {
+        return res.status(403).json({ message: 'Method Not Allowed!' });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        return res.status(401).json({ message: 'Incorrect password!' });
+    }
+
+    user.isDeleted = true;
+    await userRepository.save(user);
+
+    res.status(200).json({ message: `User account has been deleted!` });
+});
+
+authRouter.put('/users/:email/restore', async (req, res) => {
+    const { email } = req.params;
+
+    try {
+        const userRepository = myDataSource.getRepository(User);
+        const user = await userRepository.findOne({ where: { email } });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        user.isDeleted = false;
+        await userRepository.save(user);
+
+        res.status(200).json({ message: 'User account restored' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error restoring user account' });
+    }
 });
 
 export default authRouter;
