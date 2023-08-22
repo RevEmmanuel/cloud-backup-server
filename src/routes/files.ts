@@ -58,6 +58,8 @@ filesRouter.post('/upload', upload.single('file'), async (req, res) => {
             return res.status(500).json({ message: 'File upload failed' });
         }
 
+        fs.unlinkSync(bufferNew);
+
         const fileRepository = myDataSource.getRepository(File);
         const slug = await slugGenerator.generate(6, { upperCase: false, specialChars: false });
         const currentTime = new Date();
