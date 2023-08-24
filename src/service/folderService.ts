@@ -4,10 +4,14 @@ import {Folder} from "../data/entities/Folder";
 import {FileNotFoundException} from "../exceptions/FileNotFoundException";
 import {FolderNotFoundException} from "../exceptions/FolderNotFoundException";
 import {findFilesByFolder, getFileById, saveFile} from "./fileService";
+import {File} from "../data/entities/File";
+import {CloudServerException} from "../exceptions/GlobalException";
+import {UnauthorizedException} from "../exceptions/UnauthorizedException";
 
 
 const slugGenerator = require('otp-generator');
 const folderRepository = myDataSource.getRepository(Folder);
+const fileRepository = myDataSource.getRepository(File);
 
 
 export async function createNewFolder(folderName: string, user: User) {
@@ -50,6 +54,10 @@ export async function addFileToFolder(folderId: number, fileId: number, user: Us
     const folder = await folderRepository.findOne( { where: { id: folderId, user: { id: user.id } }});
     if (!folder) {
         throw new FolderNotFoundException('Folder not found!');
+    }
+    const fileExistsAlready = await fileRepository.findOneBy({ id: fileId, user: { id: user.id }, folder: folder });
+    if (fileExistsAlready) {
+        throw new UnauthorizedException('File already exists in the folder');
     }
     const file = await getFileById(fileId, user);
     if (!file) {

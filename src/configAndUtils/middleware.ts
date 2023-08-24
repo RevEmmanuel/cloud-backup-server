@@ -7,6 +7,7 @@ import {myDataSource} from "../database";
 import {UnauthorizedException} from "../exceptions/UnauthorizedException";
 import {InvalidOtpException} from "../exceptions/InvalidOtpException";
 import {globalExceptionHandler} from "../exceptions/GlobalExceptionHandler";
+import {CloudServerException} from "../exceptions/GlobalException";
 
 
 dotenv.config();
@@ -19,18 +20,22 @@ export const authVerification = async (req: any, res: Response, next: NextFuncti
         return res.status(401).json({ message: 'Authorization token required' });
     }
 
-    const sessionRepository: Repository<Session> = myDataSource.getRepository(Session);
-    const foundToken = await sessionRepository.findOne({ where: { jwtToken: token }});
-    if (foundToken === null) {
-        throw new UnauthorizedException('Please login to continue');
-    }
-    jwt.verify(token, secretKey, (error: any, decoded: any) => {
-        if (error) {
-            throw new InvalidOtpException('Invalid or expired token');
+    try {
+        const sessionRepository: Repository<Session> = myDataSource.getRepository(Session);
+        const foundToken = await sessionRepository.findOne({ where: { jwtToken: token }});
+        if (foundToken === null) {
+            throw new UnauthorizedException('Please login to continue');
         }
-        req.user = decoded;
-        next();
-    });
+        jwt.verify(token, secretKey, (error: any, decoded: any) => {
+            if (error) {
+                throw new InvalidOtpException('Invalid or expired token');
+            }
+            req.user = decoded;
+            next();
+        });
+    } catch (error: any) {
+        await globalExceptionHandler(error, req, res, next);
+    }
 }
 
 
@@ -40,22 +45,27 @@ export const adminVerification = async (req: any, res: Response, next: NextFunct
         res.status(401).json({ message: 'Authorization token required' });
         return;
     }
-    const sessionRepository: Repository<Session> = myDataSource.getRepository(Session);
-    const foundToken = await sessionRepository.findOne({ where: { jwtToken: token }});
-    if (foundToken === null) {
-        throw new UnauthorizedException('Please login to continue');
-    }
-    jwt.verify(token, secretKey, (error: any, decoded: any) => {
-        if (error) {
-            throw new InvalidOtpException('Invalid or expired token');
+    try {
+        const sessionRepository: Repository<Session> = myDataSource.getRepository(Session);
+        const foundToken = await sessionRepository.findOne({ where: { jwtToken: token }});
+        if (foundToken === null) {
+            throw new UnauthorizedException('Please login to continue');
         }
-        req.user = decoded;
-    });
-    const user = req.user.user;
-    if (user.role === 'ADMIN') {
-        next();
-    } else {
-        await globalExceptionHandler(new UnauthorizedException('Permission denied'), req, res, next);
+        jwt.verify(token, secretKey, (error: any, decoded: any) => {
+            if (error) {
+                throw new InvalidOtpException('Invalid or expired token');
+            }
+            req.user = decoded;
+        });
+        const user = req.user.user;
+        if (user.role === 'ADMIN') {
+            next();
+        } else {
+            throw new UnauthorizedException('Permission denied');
+        }
+    }
+    catch (error: any) {
+        await globalExceptionHandler(error, req, res, next);
     }
 };
 

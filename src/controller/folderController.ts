@@ -68,7 +68,7 @@ folderRouter.get('/get/:slug', async (req: any, res, next) => {
 });
 
 
-folderRouter.get('/:folderId/add/:fileId', async (req: any, res, next) => {
+folderRouter.post('/:folderId/add/:fileId', async (req: any, res, next) => {
     const { folderId, fileId } = req.params;
     const user = req.user.user;
 

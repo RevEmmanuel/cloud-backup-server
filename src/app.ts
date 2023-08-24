@@ -6,12 +6,13 @@ import downloadRouter from "./controller/downloads";
 import folderRouter from "./controller/folderController";
 import adminRouter from "./controller/adminController";
 import userRouter from "./controller/userController";
-import {CloudServerException} from "./exceptions/GlobalException";
 import {adminVerification, authVerification} from "./configAndUtils/middleware";
 import {globalExceptionHandler} from "./exceptions/GlobalExceptionHandler";
 
+
 const app = express();
 app.use(express.json());
+
 
 app.get('/', (req, res) => {
     res.send('Hello, TypeScript and Express!');
@@ -33,3 +34,4 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
