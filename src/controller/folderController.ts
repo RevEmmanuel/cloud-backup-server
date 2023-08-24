@@ -30,7 +30,7 @@ folderRouter.post('/create', async (req: any, res, next) => {
         if (!folderName) {
             return res.status(400).json({ message: 'Missing name field' });
         }
-        const user = req.user;
+        const user = req.user.user;
         const createdFolder = await createNewFolder(folderName, user);
         const createFolderResponse = await instanceToPlain(createdFolder, { excludeExtraneousValues: true }) as CreateFolderResponse;
         res.status(201).json({ message: 'Folder created successfully!', folder: createFolderResponse });
@@ -42,7 +42,7 @@ folderRouter.post('/create', async (req: any, res, next) => {
 
 folderRouter.get('/:folderId/files', async (req: any, res, next) => {
     const { folderId } = req.params;
-    const user = req.user;
+    const user = req.user.user;
 
     try {
         const foundFiles = await getFilesInFolder(folderId, user);
@@ -56,7 +56,7 @@ folderRouter.get('/:folderId/files', async (req: any, res, next) => {
 
 folderRouter.get('/get/:slug', async (req: any, res, next) => {
     const { slug } = req.params;
-    const user = req.user;
+    const user = req.user.user;
 
     try {
         const foundFolder = await findFolderBySlug(slug, user);
@@ -70,7 +70,7 @@ folderRouter.get('/get/:slug', async (req: any, res, next) => {
 
 folderRouter.get('/:folderId/add/:fileId', async (req: any, res, next) => {
     const { folderId, fileId } = req.params;
-    const user = req.user;
+    const user = req.user.user;
 
     try {
         const folder = await addFileToFolder(folderId, fileId, user);

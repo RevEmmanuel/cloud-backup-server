@@ -72,7 +72,10 @@ export async function uploadFileForUser(req: any) {
 }
 
 export async function getFileById(fileId: number, user: User) {
-    const foundFile = await fileRepository.findOne({where: {user: user, id: fileId}});
+    if (user.role === 'ADMIN') {
+        return await fileRepository.findOneBy({id: fileId})
+    }
+    const foundFile = await fileRepository.findOne({where: {user: { id: user.id }, id: fileId}});
     if (!foundFile) {
         throw new FileNotFoundException('File not found!');
     }
@@ -90,6 +93,9 @@ export async function findFilesByFolder(folder: Folder) {
 
 export async function getFileBySlug(slug: string, user: User) {
     const foundFile = await fileRepository.findOne({where: { user: {id: user.id}, slug: slug }});
+    if (user.role === 'ADMIN') {
+        return await fileRepository.findOneBy({slug: slug});
+    }
     if (!foundFile) {
         throw new FileNotFoundException('File not found!');
     }

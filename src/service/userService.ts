@@ -17,11 +17,7 @@ export async function deleteUser(id: number, password: string, userMakingRequest
         throw new UserNotFoundException('User not found!');
     }
     if (user.id !== userMakingRequest.id) {
-        console.log(user);
-        console.log(userMakingRequest as User);
         if (userMakingRequest.role !== 'ADMIN') {
-            console.log(user.role);
-            console.log(userMakingRequest.role);
             throw new UnauthorizedException('You are not authorized to perform this action!');
         }
     }
@@ -69,7 +65,7 @@ export async function deleteUser(id: number, password: string, userMakingRequest
 
 export async function revokeUserSessions(user: User) {
     const sessionRepository = myDataSource.getRepository(Session);
-    const tokens = await sessionRepository.find({ where: { user: user } });
+    const tokens = await sessionRepository.find({ where: { user: { id: user.id } } });
     try {
         for (const token of tokens) {
             await sessionRepository.remove(token);

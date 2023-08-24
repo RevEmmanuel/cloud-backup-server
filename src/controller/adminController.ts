@@ -4,7 +4,7 @@ import {Router} from "express";
 import {File} from "../data/entities/File";
 import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
-import {getFileById} from "../service/fileService";
+import {getAllFilesForUser, getFileById} from "../service/fileService";
 import {UserNotFoundException} from "../exceptions/UserNotFoundException";
 import {FileNotFoundException} from "../exceptions/FileNotFoundException";
 import {CloudServerException} from "../exceptions/GlobalException";
@@ -72,7 +72,7 @@ adminRouter.post('/invite', async (req, res, next) => {
 
 adminRouter.put('/file/mark-unsafe/:fileId', async (req: any, res, next) => {
     const { fileId } = req.params;
-    const user = req.user;
+    const user = req.user.user;
 
     try {
         const fileRepository = myDataSource.getRepository(File);
@@ -185,9 +185,7 @@ adminRouter.get('/user/:userId/files', async (req: any, res, next) => {
         next(new UserNotFoundException('User not found!'));
         return;
     }
-
-    const fileRepository = myDataSource.getRepository(File);
-    const files = await fileRepository.findBy({ user: user });
+    const files = await getAllFilesForUser(user);
     res.status(200).json({ files: files });
 });
 
@@ -222,7 +220,7 @@ adminRouter.post('/user/:userId/send-mail', async (req: any, res, next) => {
 
 adminRouter.get('/file/:fileId', async (req: any, res, next) => {
     const { fileId } = req.params.fileId;
-    const user = req.user;
+    const user = req.user.user;
 
     try {
         const file = await getFileById(fileId, user);
