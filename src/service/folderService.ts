@@ -52,6 +52,9 @@ export async function addFileToFolder(folderId: number, fileId: number, user: Us
         throw new FolderNotFoundException('Folder not found!');
     }
     const file = await getFileById(fileId, user);
+    if (!file) {
+        throw new FileNotFoundException('File not found');
+    }
     file.folder = folder;
     await saveFile(file);
     const currentTime = new Date();
