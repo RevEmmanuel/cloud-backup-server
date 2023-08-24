@@ -27,7 +27,7 @@ export async function getAllServerFiles() {
 
 export async function uploadFileForUser(req: any) {
     const { originalname, buffer, mimetype } = req.file;
-    const user = req.user;
+    const user = req.user.user;
 
     let result;
 

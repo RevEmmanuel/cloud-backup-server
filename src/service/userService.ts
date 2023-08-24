@@ -16,8 +16,15 @@ export async function deleteUser(id: number, password: string, userMakingRequest
     if (!user) {
         throw new UserNotFoundException('User not found!');
     }
-    if (user !== userMakingRequest && userMakingRequest.role !== 'ADMIN') {
-        throw new UnauthorizedException('You are not authorized to perform this action!');
+    console.log(userMakingRequest as User);
+    if (user !== userMakingRequest as User) {
+        console.log(user);
+        console.log(userMakingRequest as User);
+        if (userMakingRequest.role !== 'ADMIN') {
+            console.log(user.role);
+            console.log(userMakingRequest.role);
+            throw new UnauthorizedException('You are not authorized to perform this action!');
+        }
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);

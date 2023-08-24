@@ -24,7 +24,7 @@ async function convertFilesToFileResponse(foundFiles: File[]) {
 }
 
 
-folderRouter.post('/create', async (req: any, res) => {
+folderRouter.post('/create', async (req: any, res, next) => {
     try {
         const { folderName } = req.body;
         if (!folderName) {
@@ -35,12 +35,12 @@ folderRouter.post('/create', async (req: any, res) => {
         const createFolderResponse = await instanceToPlain(createdFolder, { excludeExtraneousValues: true }) as CreateFolderResponse;
         res.status(201).json({ message: 'Folder created successfully!', folder: createFolderResponse });
     } catch (error) {
-        res.status(500).json({ message: 'Error creating folder' });
+        next(error);
     }
 });
 
 
-folderRouter.get('/:folderId/files', async (req: any, res) => {
+folderRouter.get('/:folderId/files', async (req: any, res, next) => {
     const { folderId } = req.params;
     const user = req.user;
 
@@ -49,12 +49,12 @@ folderRouter.get('/:folderId/files', async (req: any, res) => {
         const files = await convertFilesToFileResponse(foundFiles);
         res.status(200).json({ files: files });
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching files in folder' });
+        next(error);
     }
 });
 
 
-folderRouter.get('/get/:slug', async (req: any, res) => {
+folderRouter.get('/get/:slug', async (req: any, res, next) => {
     const { slug } = req.params;
     const user = req.user;
 
@@ -63,12 +63,12 @@ folderRouter.get('/get/:slug', async (req: any, res) => {
         const findFolderResponse = await instanceToPlain(foundFolder, { excludeExtraneousValues: true }) as FindFolderResponse;
         res.status(200).json({ folder: findFolderResponse });
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching folder' });
+        next(error);
     }
 });
 
 
-folderRouter.get('/:folderId/add/:fileId', async (req: any, res) => {
+folderRouter.get('/:folderId/add/:fileId', async (req: any, res, next) => {
     const { folderId, fileId } = req.params;
     const user = req.user;
 
@@ -77,7 +77,7 @@ folderRouter.get('/:folderId/add/:fileId', async (req: any, res) => {
         const folderResponse = await instanceToPlain(folder, { excludeExtraneousValues: true }) as FindFolderResponse;
         res.status(200).json({ folder: folderResponse });
     } catch (error) {
-        res.status(500).json({ message: 'Error adding file to folder' });
+        next(error);
     }
 });
 

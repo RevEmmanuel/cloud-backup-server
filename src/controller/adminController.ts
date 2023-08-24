@@ -5,6 +5,9 @@ import {File} from "../data/entities/File";
 import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
 import {getFileById} from "../service/fileService";
+import {UserNotFoundException} from "../exceptions/UserNotFoundException";
+import {FileNotFoundException} from "../exceptions/FileNotFoundException";
+import {CloudServerException} from "../exceptions/GlobalException";
 
 
 dotenv.config();
@@ -13,21 +16,32 @@ const transporter = require('../configAndUtils/emailConfig');
 const secretKey = process.env.JWT_SECRET || '';
 
 
-adminRouter.post('/invite', async (req, res) => {
+adminRouter.post('/invite', async (req, res, next) => {
     const { email } = req.body;
+    console.log(email);
+    try{
+        if (!email) {
+            throw new CloudServerException('Missing email field', 500);
+        }
 
-    if (!email) {
-        return res.status(400).json({ message: 'Missing Email field' });
-    }
+        const userRepository = myDataSource.getRepository(User);
+        const user = await userRepository.findOne({ where: { email: email } });
+        console.log(user);
+        if (!user) {
+            throw new UserNotFoundException('User not found!');
+        }
+        if (user.role === 'ADMIN') {
+            throw new CloudServerException('User is already an admin', 500);
+        }
 
-    const token = jwt.sign({ email }, secretKey, { expiresIn: '24h' });
-    const invitationLink = `http://localhost:5000/admin/register?token=${token}`;
+        const token = jwt.sign({ email }, secretKey, { expiresIn: '24h' });
+        const invitationLink = `http://localhost:5000/admin/register?token=${token}`;
 
-    const mailOptions = {
-        from: '"Cloud Backup Admin" <cloud-backup@gmail.com>',
-        to: `${email}`,
-        subject: 'You have been invited to become an Admin',
-        html: `
+        const mailOptions = {
+            from: '"Cloud Backup Admin" <cloud-backup@gmail.com>',
+            to: `${email}`,
+            subject: 'You have been invited to become an Admin',
+            html: `
         <h1>Hi!</h1>
         <h1>Welcome to Cloud Backup Admin Block.</h1>
         <p>We're glad to have you on the team!</p>
@@ -39,21 +53,24 @@ adminRouter.post('/invite', async (req, res) => {
         <p>${invitationLink}</p>
         <p>Link is only valid for 24 hours.</p>
         `
-    };
+        };
 
-    transporter.sendMail(mailOptions, (error: any, info: any) => {
-        if (error) {
-            console.error('Error sending email:', error);
-        } else {
-            console.log('Email sent:', info.response);
-        }
-    });
-
-    res.status(201).json({ message: 'Admin invited successfully' });
+        await transporter.sendMail(mailOptions, async (error: any, info: any) => {
+            if (error) {
+                console.error('Error sending email:', error);
+                throw new CloudServerException(error.message, 500);
+            } else {
+                console.log('Email sent:', info.response);
+            }
+        });
+        res.status(200).json({ message: 'Admin invited successfully' });
+    } catch(error) {
+        next(error);
+    }
 });
 
 
-adminRouter.put('/file/mark-unsafe/:fileId', async (req: any, res) => {
+adminRouter.put('/file/mark-unsafe/:fileId', async (req: any, res, next) => {
     const { fileId } = req.params;
     const user = req.user;
 
@@ -61,7 +78,7 @@ adminRouter.put('/file/mark-unsafe/:fileId', async (req: any, res) => {
         const fileRepository = myDataSource.getRepository(File);
         const file = await getFileById(fileId, user);
         if (!file) {
-            return res.status(404).json({ message: 'File not found' });
+            throw new FileNotFoundException('File not found');
         }
         file.isUnsafe = true;
         file.unsafeCount = file.unsafeCount + 1;
@@ -81,11 +98,12 @@ adminRouter.put('/file/mark-unsafe/:fileId', async (req: any, res) => {
             transporter.sendMail(mailOptions, (error: any, info: any) => {
                 if (error) {
                     console.error('Error sending email:', error);
+                    throw new CloudServerException(error.message, 500);
                 } else {
                     console.log('Email sent:', info.response);
                 }
             });
-            res.status(200).json({ message: 'File marked as unsafe' });
+            return res.status(200).json({ message: 'File marked as unsafe' });
         } else {
             const mailOptions = {
                 from: '"Cloud Backup Admin" <cloud-backup@gmail.com>',
@@ -100,37 +118,39 @@ adminRouter.put('/file/mark-unsafe/:fileId', async (req: any, res) => {
             transporter.sendMail(mailOptions, (error: any, info: any) => {
                 if (error) {
                     console.error('Error sending email:', error);
+                    throw new CloudServerException(error.message, 500);
                 } else {
                     console.log('Email sent:', info.response);
                 }
             });
-
             await fileRepository.delete(file);
-            res.status(200).json({ message: 'File marked as unsafe by multiple admins; File deleted!' });
+            return res.status(200).json({ message: 'File marked as unsafe by multiple admins; File deleted!' });
         }
     } catch (error) {
-        res.status(500).json({ message: 'Error marking file as unsafe' });
+        next(error);
     }
 });
 
 adminRouter.get('/users/all', async (req, res) => {
     const users = await myDataSource.manager.find(User);
-    res.status(201).json({ users: users });
+    res.status(200).json({ users: users });
 });
 
 
 adminRouter.get('/files/all', async (req, res) => {
     const files = await myDataSource.manager.find(File);
-    res.status(201).json({ files: files });
+    res.status(200).json({ files: files });
 });
 
-adminRouter.put('/user/:userId', async (req: any, res) => {
+
+adminRouter.put('/user/:userId', async (req: any, res, next) => {
 
     const userId = req.params.userId;
     const userRepository = myDataSource.getRepository(User);
     const user = await userRepository.findOne({ where: { id: userId } });
     if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        next(new UserNotFoundException('User not found!'));
+        return;
     }
     user.isDisabled = true;
     await userRepository.save(user);
@@ -148,35 +168,38 @@ adminRouter.put('/user/:userId', async (req: any, res) => {
     transporter.sendMail(mailOptions, (error: any, info: any) => {
         if (error) {
             console.error('Error sending email:', error);
+            throw new CloudServerException(error.message, 500);
         } else {
             console.log('Email sent:', info.response);
+            res.status(200).json({ message: 'User account disabled' });
         }
     });
-    res.status(201).json({ message: 'User account disabled' });
 });
 
 
-adminRouter.get('/user/:userId/files', async (req: any, res) => {
+adminRouter.get('/user/:userId/files', async (req: any, res, next) => {
     const userId = req.params.userId;
     const userRepository = myDataSource.getRepository(User);
     const user = await userRepository.findOne({ where: { id: userId } });
     if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        next(new UserNotFoundException('User not found!'));
+        return;
     }
 
     const fileRepository = myDataSource.getRepository(File);
     const files = await fileRepository.findBy({ user: user });
-    res.status(201).json({ files: files });
+    res.status(200).json({ files: files });
 });
 
 
-adminRouter.post('/user/:userId/send-mail', async (req: any, res) => {
+adminRouter.post('/user/:userId/send-mail', async (req: any, res, next) => {
     const userId = req.params.userId;
     const { subject, content } = req.body;
     const userRepository = myDataSource.getRepository(User);
     const user = await userRepository.findOne({ where: { id: userId } });
     if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        next(new UserNotFoundException('User not found!'));
+        return;
     }
 
     const mailOptions = {
@@ -188,15 +211,16 @@ adminRouter.post('/user/:userId/send-mail', async (req: any, res) => {
     transporter.sendMail(mailOptions, (error: any, info: any) => {
         if (error) {
             console.error('Error sending email:', error);
+            throw new CloudServerException(error.message, 500);
         } else {
             console.log('Email sent:', info.response);
         }
     });
-    res.status(201).json({ message: 'Email Sent!' });
+    res.status(200).json({ message: 'Email Sent!' });
 });
 
 
-adminRouter.get('/file/:fileId', async (req: any, res) => {
+adminRouter.get('/file/:fileId', async (req: any, res, next) => {
     const { fileId } = req.params.fileId;
     const user = req.user;
 
@@ -204,12 +228,11 @@ adminRouter.get('/file/:fileId', async (req: any, res) => {
         const file = await getFileById(fileId, user);
 
         if (!file) {
-            return res.status(404).json({ message: 'File not found' });
+            throw new FileNotFoundException('File not found!');
         }
-
         return res.status(200).json({file: file});
     } catch (error) {
-        res.status(500).json({ message: 'Error marking file as unsafe' });
+        next(error);
     }
 });
 

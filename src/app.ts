@@ -5,8 +5,9 @@ import filesRouter from "./controller/fileController";
 import downloadRouter from "./controller/downloads";
 import folderRouter from "./controller/folderController";
 import adminRouter from "./controller/adminController";
-import { authVerification, adminVerification } from './configAndUtils/middleware';
 import userRouter from "./controller/userController";
+import {CloudServerException} from "./exceptions/GlobalException";
+import {adminVerification, authVerification} from "./configAndUtils/middleware";
 
 const app = express();
 app.use(express.json());
@@ -24,7 +25,8 @@ app.use('/download', authVerification, downloadRouter);
 app.use('/admin', adminVerification, adminRouter);
 
 
-app.use((err: any, req: any, res: any) => {
+app.use((err: CloudServerException, req: any, res: any, next: any) => {
+    console.error('Error ' + err.statusCode + ':  ' + err.message);
     console.error(err.stack);
     res.status(err.statusCode || 500).json({ message: err.message });
 });

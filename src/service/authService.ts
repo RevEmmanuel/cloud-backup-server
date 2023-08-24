@@ -51,7 +51,7 @@ export async function createNewUser(dto: SignUpRequest) {
         <p>We're glad to have you!</p>
         
         <p>Please click the link below to verify your account:</p>
-        <a href="http://localhost:5000/verify/${otp}" target="_blank">Verify my account</a>
+        <a href="http://localhost:5000/auth/verify/${otp}" target="_blank">Verify my account</a>
         <br />
         <br />
         <p>If that doesn't work, copy the link below and paste in your browser:</p>
@@ -66,7 +66,6 @@ export async function createNewUser(dto: SignUpRequest) {
             console.log('Email sent:', info.response);
         }
     });
-
 
     return createdUser;
 }
@@ -132,10 +131,13 @@ export async function registerAdmin(email: string) {
     if (user.isDisabled) {
         throw new AccountDisabledException('Account disabled!')
     }
+    if (user.role === 'ADMIN') {
+        throw new CloudServerException('User is already an admin', 400);
+    }
     user.role = 'ADMIN';
     await userRepository.save(user);
-    return true;
 }
+
 
 export async function verifyUser(otp: string) {
     const foundOtp = await otpRepository.findOne({ where: { otp } });
@@ -182,7 +184,14 @@ export async function verifyUser(otp: string) {
         console.error('JWT secret key is missing in the .env file');
         throw new CloudServerException('An error occurred', 500);
     }
-    return jwt.sign({user: user}, secretKey, {expiresIn: '24h'});
+    const token = jwt.sign({user: user}, secretKey, {expiresIn: '24h'});
+    const sessionRepository = myDataSource.getRepository(Session);
+    const newSession = sessionRepository.create({
+        user,
+        jwtToken: token,
+    });
+    await sessionRepository.save(newSession);
+    return token;
 }
 
 
@@ -206,6 +215,7 @@ async function createUserFromDto(dto: SignUpRequest) {
     });
 }
 
+
 async function storeOTPInDatabase(ownerEmail: string, otp: string) {
     const currentTime = new Date();
     const expiresAt = new Date(currentTime);
@@ -218,6 +228,7 @@ async function storeOTPInDatabase(ownerEmail: string, otp: string) {
     });
     await otpRepository.save(newOtp);
 }
+
 
 async function verifyOTP(foundOtp: VerificationOtp | null) {
     if (foundOtp === null) {

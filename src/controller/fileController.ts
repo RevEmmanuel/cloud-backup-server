@@ -20,19 +20,19 @@ async function convertFilesToFileResponse(foundFiles: File[]) {
 }
 
 
-filesRouter.get('/', async (req: any, res) => {
+filesRouter.get('/', async (req: any, res, next) => {
     try {
-        const user = req.user;
+        const user = req.user.user;
         const files = await getAllFiles(user);
         const fileResponses = await convertFilesToFileResponse(files);
         res.status(200).json({ files: fileResponses });
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching files' });
+        next(error);
     }
 });
 
 
-filesRouter.post('/upload', upload.single('file'), async (req, res) => {
+filesRouter.post('/upload', upload.single('file'), async (req, res, next) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
@@ -42,8 +42,7 @@ filesRouter.post('/upload', upload.single('file'), async (req, res) => {
         const fileResponse = await instanceToPlain(savedFile, { excludeExtraneousValues: true }) as FindFileResponse;
         res.status(200).json({ message: 'SUCCESSFUL', file: fileResponse });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Error uploading file' });
+        next(error);
     }
 });
 
