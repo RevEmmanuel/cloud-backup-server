@@ -8,6 +8,7 @@ import adminRouter from "./controller/adminController";
 import userRouter from "./controller/userController";
 import {CloudServerException} from "./exceptions/GlobalException";
 import {adminVerification, authVerification} from "./configAndUtils/middleware";
+import {globalExceptionHandler} from "./exceptions/GlobalExceptionHandler";
 
 const app = express();
 app.use(express.json());
@@ -25,11 +26,7 @@ app.use('/download', authVerification, downloadRouter);
 app.use('/admin', adminVerification, adminRouter);
 
 
-app.use((err: CloudServerException, req: any, res: any, next: any) => {
-    console.error('Error ' + err.statusCode + ':  ' + err.message);
-    console.error(err.stack);
-    res.status(err.statusCode || 500).json({ message: err.message });
-});
+app.use(globalExceptionHandler);
 
 
 const PORT = process.env.PORT || 5000;

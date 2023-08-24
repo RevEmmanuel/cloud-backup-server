@@ -28,7 +28,7 @@ adminRouter.post('/invite', async (req, res, next) => {
         const user = await userRepository.findOne({ where: { email: email } });
         console.log(user);
         if (!user) {
-            throw new UserNotFoundException('User not found!');
+            throw new UserNotFoundException('Account does not exist');
         }
         if (user.role === 'ADMIN') {
             throw new CloudServerException('User is already an admin', 500);

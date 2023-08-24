@@ -15,13 +15,13 @@ const fileRepository = myDataSource.getRepository(File);
 const slugGenerator = require('otp-generator');
 
 
-export async function getAllFiles(user: User) {
-    return await myDataSource.manager.find(File);
+export async function getAllFilesForUser(user: User) {
+    return fileRepository.findBy({user: {id: user.id}});
 }
 
 
 export async function getAllServerFiles() {
-    return await fileRepository.find();
+    return await myDataSource.manager.find(File);
 }
 
 
@@ -76,9 +76,6 @@ export async function getFileById(fileId: number, user: User) {
     if (!foundFile) {
         throw new FileNotFoundException('File not found!');
     }
-    if (foundFile.user !== user && user.role !== 'ADMIN') {
-        throw new UnauthorizedException('Not allowed!');
-    }
     return foundFile;
 }
 
@@ -88,5 +85,15 @@ export async function saveFile(file: File) {
 
 export async function findFilesByFolder(folder: Folder) {
     return await fileRepository.find({where: {folder: folder}});
+}
+
+
+export async function getFileBySlug(slug: string, user: User) {
+    const foundFile = await fileRepository.findOne({where: { user: {id: user.id}, slug: slug }});
+    if (!foundFile) {
+        throw new FileNotFoundException('File not found!');
+    }
+    console.log(foundFile);
+    return foundFile;
 }
 

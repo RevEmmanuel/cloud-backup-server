@@ -14,6 +14,7 @@ import {Session} from "../data/entities/Session";
 import {CloudServerException} from "../exceptions/GlobalException";
 import {AccountDisabledException} from "../exceptions/AccountDisabledException";
 import {InvalidOtpException} from "../exceptions/InvalidOtpException";
+import {UnauthorizedException} from "../exceptions/UnauthorizedException";
 
 
 dotenv.config();
@@ -118,6 +119,9 @@ export async function restoreUserEmail(email: string) {
     const user = await userRepository.findOne({ where: { email } });
     if (!user) {
         throw new UserNotFoundException('User not found!');
+    }
+    if (!user.isDeleted) {
+        throw new UnauthorizedException('User account was not deleted');
     }
     user.isDeleted = false;
     return await userRepository.save(user);

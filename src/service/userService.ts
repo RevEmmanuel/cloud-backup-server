@@ -16,8 +16,7 @@ export async function deleteUser(id: number, password: string, userMakingRequest
     if (!user) {
         throw new UserNotFoundException('User not found!');
     }
-    console.log(userMakingRequest as User);
-    if (user !== userMakingRequest as User) {
+    if (user.id !== userMakingRequest.id) {
         console.log(user);
         console.log(userMakingRequest as User);
         if (userMakingRequest.role !== 'ADMIN') {
@@ -27,7 +26,10 @@ export async function deleteUser(id: number, password: string, userMakingRequest
         }
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    let isPasswordValid = await bcrypt.compare(password, user.password);
+    if (userMakingRequest.role === 'ADMIN') {
+        isPasswordValid = true;
+    }
     if (!isPasswordValid) {
         throw new IncorrectPasswordException('Incorrect Password!');
     }

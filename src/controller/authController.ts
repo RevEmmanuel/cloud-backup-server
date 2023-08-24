@@ -67,10 +67,14 @@ authRouter.get('/verify/:otp', async (req, res, next) => {
 });
 
 
-authRouter.put('/users/:email/restore', async (req, res, next) => {
-    const { email } = req.params;
+authRouter.put('/users/restore', async (req, res, next) => {
+    const { email }  = req.query;
+    if (!email) {
+        return res.status(400).json({message: 'Missing email field'});
+    }
+    const emailAddress = email as string;
     try {
-        const user = await restoreUserEmail(email);
+        const user = await restoreUserEmail(emailAddress);
         const restoredUser = instanceToPlain(user, { excludeExtraneousValues: true }) as CreateUserResponse;
         res.status(200).json({ message: 'User account restored', user: restoredUser });
     } catch (error) {

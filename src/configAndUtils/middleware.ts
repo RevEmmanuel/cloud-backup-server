@@ -1,11 +1,12 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { Request, Response, NextFunction } from 'express'; // Import Request, Response, and NextFunction types
-import { Repository } from 'typeorm'; // Import Repository type
+import { Request, Response, NextFunction } from 'express';
+import { Repository } from 'typeorm';
 import { Session } from "../data/entities/Session";
 import {myDataSource} from "../database";
 import {UnauthorizedException} from "../exceptions/UnauthorizedException";
 import {InvalidOtpException} from "../exceptions/InvalidOtpException";
+import {globalExceptionHandler} from "../exceptions/GlobalExceptionHandler";
 
 
 dotenv.config();
@@ -21,7 +22,7 @@ export const authVerification = async (req: any, res: Response, next: NextFuncti
     const sessionRepository: Repository<Session> = myDataSource.getRepository(Session);
     const foundToken = await sessionRepository.findOne({ where: { jwtToken: token }});
     if (foundToken === null) {
-        throw new InvalidOtpException('Invalid or expired token');
+        throw new UnauthorizedException('Please login to continue');
     }
     jwt.verify(token, secretKey, (error: any, decoded: any) => {
         if (error) {
@@ -39,6 +40,11 @@ export const adminVerification = async (req: any, res: Response, next: NextFunct
         res.status(401).json({ message: 'Authorization token required' });
         return;
     }
+    const sessionRepository: Repository<Session> = myDataSource.getRepository(Session);
+    const foundToken = await sessionRepository.findOne({ where: { jwtToken: token }});
+    if (foundToken === null) {
+        throw new UnauthorizedException('Please login to continue');
+    }
     jwt.verify(token, secretKey, (error: any, decoded: any) => {
         if (error) {
             throw new InvalidOtpException('Invalid or expired token');
@@ -49,8 +55,7 @@ export const adminVerification = async (req: any, res: Response, next: NextFunct
     if (user.role === 'ADMIN') {
         next();
     } else {
-        console.log(user);
-        throw new UnauthorizedException('Permission denied');
+        await globalExceptionHandler(new UnauthorizedException('Permission denied'), req, res, next);
     }
 };
 
