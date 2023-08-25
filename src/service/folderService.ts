@@ -5,7 +5,6 @@ import {FileNotFoundException} from "../exceptions/FileNotFoundException";
 import {FolderNotFoundException} from "../exceptions/FolderNotFoundException";
 import {findFilesByFolder, getFileById, saveFile} from "./fileService";
 import {File} from "../data/entities/File";
-import {CloudServerException} from "../exceptions/GlobalException";
 import {UnauthorizedException} from "../exceptions/UnauthorizedException";
 
 

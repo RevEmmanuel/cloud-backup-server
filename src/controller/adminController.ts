@@ -2,12 +2,13 @@ import {myDataSource} from "../database";
 import {User} from "../data/entities/User";
 import {Router} from "express";
 import {File} from "../data/entities/File";
-import dotenv from "dotenv";
+import dotenv, {parse} from "dotenv";
 import {getAllFilesForUser, getFileById} from "../service/fileService";
 import {UserNotFoundException} from "../exceptions/UserNotFoundException";
 import {FileNotFoundException} from "../exceptions/FileNotFoundException";
 import {CloudServerException} from "../exceptions/GlobalException";
 import {inviteAdmin, markFileAsUnsafe} from "../service/adminService";
+import {getUserById} from "../service/userService";
 
 
 dotenv.config();
@@ -29,7 +30,6 @@ adminRouter.post('/invite', async (req, res, next) => {
 adminRouter.put('/file/mark-unsafe/:fileId', async (req: any, res, next) => {
     const { fileId } = req.params;
     const user = req.user.user;
-
     try {
         await markFileAsUnsafe(fileId, user);
         return res.status(200).json({ message: 'File marked as unsafe' });
@@ -50,7 +50,7 @@ adminRouter.get('/files/all', async (req, res) => {
 });
 
 
-adminRouter.put('/user/:userId', async (req: any, res, next) => {
+adminRouter.put('/disable-user/:userId', async (req: any, res, next) => {
 
     const userId = req.params.userId;
     const userRepository = myDataSource.getRepository(User);
@@ -126,9 +126,8 @@ adminRouter.post('/user/:userId/send-mail', async (req: any, res, next) => {
 
 
 adminRouter.get('/file/:fileId', async (req: any, res, next) => {
-    const { fileId } = req.params.fileId;
+    const { fileId } = req.params;
     const user = req.user.user;
-
     try {
         const file = await getFileById(fileId, user);
 
@@ -141,5 +140,20 @@ adminRouter.get('/file/:fileId', async (req: any, res, next) => {
     }
 });
 
+
+adminRouter.get('/user/:userId', async (req: any, res, next) => {
+    const { userId } = req.params;
+    const user = req.user.user;
+    try {
+        const foundUser = await getUserById(userId, user);
+
+        if (!foundUser) {
+            throw new UserNotFoundException('User not found!');
+        }
+        return res.status(200).json({user: foundUser});
+    } catch (error) {
+        next(error);
+    }
+});
 
 export default adminRouter;

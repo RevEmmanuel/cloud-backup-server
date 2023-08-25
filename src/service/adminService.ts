@@ -69,36 +69,18 @@ export async function markFileAsUnsafe(fileId: number, user: User) {
     }
     file.isUnsafe = true;
     file.unsafeCount = file.unsafeCount + 1;
-    if (file.unsafeCount < 3) {
-        await fileRepository.save(file);
+    await fileRepository.save(file);
+    if (file.unsafeCount >= 3) {
+        /**
+        const fileOwner = file.user;
         const mailOptions = {
             from: '"Cloud Backup Admin" <cloud-backup@gmail.com>',
-            to: `${file.user.email}`,
+            to: `${fileOwner.email}`,
             subject: 'Your file has been flagged as unsafe!',
             html: `
-        <h1>Hi, ${file.user.fullName}!</h1>
-        <h1>Your file ${file.originalFileName} which you uploaded on ${file.dateUploaded.getDate()} has been flagged as unsafe and is likely to be deleted soon..</h1>
-        <p>Regards, Cloud Backup!</p>
-        `
-        };
-
-        transporter.sendMail(mailOptions, (error: any, info: any) => {
-            if (error) {
-                console.error('Error sending email:', error);
-                throw new CloudServerException(error.message, 500);
-            } else {
-                console.log('Email sent:', info.response);
-            }
-        });
-    } else {
-        const mailOptions = {
-            from: '"Cloud Backup Admin" <cloud-backup@gmail.com>',
-            to: `${file.user.email}`,
-            subject: 'Your file has been flagged as unsafe!',
-            html: `
-        <h1>Hi, ${file.user.fullName}!</h1>
-        <h1>Your file ${file.originalFileName} which was previously marked as unsafe has been deleted.</h1>
-        <p>Regards, Cloud Backup!</p>
+        <h1>Hi, ${fileOwner.fullName}!</h1>
+        <h1>Your file ${file.originalFileName} has been flagged as unsafe and is scheduled to be deleted.</h1>
+        <p>Sorry, Cloud Backup!</p>
         `
         };
         transporter.sendMail(mailOptions, (error: any, info: any) => {
@@ -109,6 +91,7 @@ export async function markFileAsUnsafe(fileId: number, user: User) {
                 console.log('Email sent:', info.response);
             }
         });
+         **/
         await fileRepository.delete(file);
     }
 }

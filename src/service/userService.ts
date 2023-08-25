@@ -5,6 +5,7 @@ import {UserNotFoundException} from "../exceptions/UserNotFoundException";
 import {UnauthorizedException} from "../exceptions/UnauthorizedException";
 import {IncorrectPasswordException} from "../exceptions/IncorrectPasswordException";
 import {Session} from "../data/entities/Session";
+import {FileNotFoundException} from "../exceptions/FileNotFoundException";
 
 
 const transporter = require('../configAndUtils/emailConfig');
@@ -79,5 +80,14 @@ export async function revokeUserSessions(user: User) {
 
 export async function getAllUsers() {
     return await myDataSource.manager.find(User);
+}
+
+
+export async function getUserById(userId: number, user: User) {
+    const userRepository = myDataSource.getRepository(User);
+    if (user.role === 'ADMIN') {
+        return await userRepository.findOneBy({id: userId})
+    }
+    throw new UnauthorizedException('Method Not Allowed');
 }
 

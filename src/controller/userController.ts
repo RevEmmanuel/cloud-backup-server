@@ -1,6 +1,9 @@
 import {Router} from "express";
-import {deleteUser, revokeUserSessions} from "../service/userService";
+import {deleteUser, getUserById, revokeUserSessions} from "../service/userService";
 import {UnauthorizedException} from "../exceptions/UnauthorizedException";
+import {instanceToPlain} from "class-transformer";
+import CreateUserResponse from "../data/dtos/responses/CreateUserResponse";
+import {UserNotFoundException} from "../exceptions/UserNotFoundException";
 
 
 const userRouter = Router();
@@ -38,6 +41,22 @@ userRouter.post('/revoke-sessions', async (req: any, res, next) => {
     try {
         await revokeUserSessions(user);
         res.status(200).json({ message: 'Sessions revoked' });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+
+
+userRouter.get('/', async (req: any, res, next) => {
+    try {
+        const user = req.user.user;
+        const foundUser = await getUserById(user.id, user);
+        if (!foundUser) {
+            throw new UserNotFoundException('An error occurred / User not found');
+        }
+        const restoredUser = instanceToPlain(foundUser, { excludeExtraneousValues: true }) as CreateUserResponse;
+        res.status(200).json({ user: restoredUser });
     }
     catch (error) {
         next(error);
