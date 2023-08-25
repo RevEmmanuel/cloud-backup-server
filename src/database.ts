@@ -10,13 +10,14 @@ const dataSourceOptions: DataSourceOptions = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     synchronize: true,
-    logging: true,
+    logging: false,
     entities: [__dirname + '/data/entities/*.js'],
 };
 
 export const myDataSource = new DataSource(dataSourceOptions);
 
-function connectToDatabase() {
+
+export async function connectToDatabase() {
     myDataSource
         .initialize()
         .then(() => {
@@ -27,4 +28,3 @@ function connectToDatabase() {
         });
 }
 
-connectToDatabase();

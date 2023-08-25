@@ -1,0 +1,3317 @@
+{
+	"info": {
+		"_postman_id": "fccff740-c2a8-4e92-a6ac-af3b16b937a0",
+		"name": "Cloud Backup Server",
+		"description": "# API that serves as a Cloud Backup System\n\n## Tools/Stack used:\n\n- Node.Js (Typescript and Express)\n    \n- Postgres\n    \n- Docker\n    \n- Postman\n    \n- Cloudinary cloud storage provider\n    \n\n## GitHub Repository:\n\n- [Cloud Backup Server](https://github.com/RevEmmanuel/cloud-backup-server/)\n    \n\n## Documentation:\n\n- [Postman Documentation](https://documenter.getpostman.com/view/24879226/2s9Y5Wvhvw)\n    \n\n## Functionalities:\n\n- Users can create an account\n    \n- Users can upload files up to 200mb\n    \n- Users can download uploaded files\n    \n- Users can create folders to hold files\n    \n- Users can stream videos and audio\n    \n- An admin user type for managing the content uploaded\n    \n- Admins can mark pictures and videos as unsafe\n    \n- Unsafe files automatically get deleted (Multiple admin reviews before file is deleted)\n    \n- Revokable session management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "24879226",
+		"_collection_link": "https://www.postman.com/revemmanuel/workspace/my-public-workspace/collection/24879226-fccff740-c2a8-4e92-a6ac-af3b16b937a0?action=share&source=collection_link&creator=24879226"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "User Signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"Test user\",\r\n    \"email\": \"puffnnrnxamict@pretreer.com\",\r\n    \"password\": \"password\",\r\n    \"isAdmin\": false\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base-url}}auth/signup"
+					},
+					"response": [
+						{
+							"name": "User Registration Successful",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fullName\": \"John Doe\",\r\n    \"email\": \"tastodapso@gufum.com\",\r\n    \"password\": \"#Ijebuode1\",\r\n    \"isAdmin\": false\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base-url}}auth/signup"
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "177"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b1-8pa7uJ1+JzRuuAHO11u+qkdULIs\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 07:36:22 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User registered successfully\",\n    \"createdUser\": {\n        \"id\": 7,\n        \"email\": \"tastodapso@gufum.com\",\n        \"fullName\": \"John Doe\",\n        \"isVerified\": false,\n        \"dateJoined\": \"2023-08-24T07:36:22.210Z\"\n    }\n}"
+						},
+						{
+							"name": "Email Already Registered Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fullName\": \"John Doe\",\r\n    \"email\": \"tastodapso@gufum.com\",\r\n    \"password\": \"#Ijebuode1\",\r\n    \"isAdmin\": false\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base-url}}auth/signup"
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "47"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2f-ITEoQkk5avFNMBzovwyiWxzDIoc\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 08:16:51 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"This email is already registered!\"\n}"
+						},
+						{
+							"name": "Missing 'password' Input Field Validation Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fullName\": \"John Doe\",\r\n    \"email\": \"tastodapso@gufum.com\",\r\n    \"isAdmin\": false\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base-url}}auth/signup"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "192"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"c0-Dlc0KNE6GfB+cBLNqQurc0mMIlU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 08:55:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"errors\": [\n        {\n            \"property\": \"password\",\n            \"children\": [],\n            \"constraints\": {\n                \"isLength\": \"Password must be between 6 and 20 characters\",\n                \"isString\": \"Password not valid\",\n                \"isNotEmpty\": \"Password is required\"\n            }\n        }\n    ]\n}"
+						},
+						{
+							"name": "Missing 'fullName' Input Field Validation Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \r\n    \"email\": \"tastodapso@gufum.com\",\r\n    \"password\": \"#Ijebuode1\",\r\n    \"isAdmin\": false\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base-url}}auth/signup"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "138"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"8a-VTcj5sIigfe7CG/Oxr+vAGYa0AQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 09:58:06 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"errors\": [\n        {\n            \"property\": \"fullName\",\n            \"children\": [],\n            \"constraints\": {\n                \"isString\": \"Full name is required\",\n                \"isNotEmpty\": \"Full name is required\"\n            }\n        }\n    ]\n}"
+						},
+						{
+							"name": "Missing 'email' Input Field Validation Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fullName\": \"John Doe\",\r\n\r\n    \"password\": \"#Ijebuode1\",\r\n    \"isAdmin\": false\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base-url}}auth/signup"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "114"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"72-WMZ3CLAA6bzXPTtGphoIbHdum1c\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 10:00:18 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"errors\": [\n        {\n            \"property\": \"email\",\n            \"children\": [],\n            \"constraints\": {\n                \"isEmail\": \"Invalid email format/Email is required\"\n            }\n        }\n    ]\n}"
+						},
+						{
+							"name": "Missing 'isAdmin' Input Field Validation Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fullName\": \"John Doe\",\r\n    \"email\": \"tastodapso@gufum.com\",\r\n    \"password\": \"#Ijebuode1\"\r\n    \r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base-url}}auth/signup"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "122"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"7a-6oZaOKZ17jxBCCOQMG6LLo81f0w\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 10:01:12 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"errors\": [\n        {\n            \"property\": \"isAdmin\",\n            \"children\": [],\n            \"constraints\": {\n                \"isBoolean\": \"Please provide boolean value for user type\"\n            }\n        }\n    ]\n}"
+						},
+						{
+							"name": "Invalid Email Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fullName\": \"John Doe\",\r\n    \"email\": \"tastodapso@gufum.com\",\r\n    \"password\": \"#Ijebuode1\",\r\n    \"isAdmin\": false\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base-url}}auth/signup"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "245"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"f5-aGPZpf/IzOKJIY1IcdicFQqPqDU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 10:01:48 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"errors\": [\n        {\n            \"value\": \"tastodapso\",\n            \"property\": \"email\",\n            \"children\": [],\n            \"constraints\": {\n                \"isEmail\": \"Invalid email format/Email is required\"\n            }\n        },\n        {\n            \"property\": \"isAdmin\",\n            \"children\": [],\n            \"constraints\": {\n                \"isBoolean\": \"Please provide boolean value for user type\"\n            }\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "User Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"puffnnrnxamict@pretreer.com\",\r\n    \"password\": \"password\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/auth/login"
+					},
+					"response": [
+						{
+							"name": "Unverified User Login Attempt",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"mejenar746@backva.com\",\r\n    \"password\": \"password\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/auth/login"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "41"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"29-7eBDh2vm9763hMfNmMx589GTSjQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 22 Aug 2023 11:53:21 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Please verify your account!\"\n}"
+						},
+						{
+							"name": "Missing 'email' Input Field Validation Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \r\n    \"password\": \"password\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/auth/login"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "116"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"74-nQQsE96WK+QOwzWJDYau6s4jH6c\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 10:21:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"errors\": [\n        {\n            \"property\": \"email\",\n            \"children\": [],\n            \"constraints\": {\n                \"isEmail\": \"Invalid email format / Email is required\"\n            }\n        }\n    ]\n}"
+						},
+						{
+							"name": "Missing 'password' Input Field Validation Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"naydecestu@gufum.com\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/auth/login"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "192"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"c0-Dlc0KNE6GfB+cBLNqQurc0mMIlU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 10:22:05 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"errors\": [\n        {\n            \"property\": \"password\",\n            \"children\": [],\n            \"constraints\": {\n                \"isLength\": \"Password must be between 6 and 20 characters\",\n                \"isString\": \"Password not valid\",\n                \"isNotEmpty\": \"Password is required\"\n            }\n        }\n    ]\n}"
+						},
+						{
+							"name": "Invalid Email Format Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"@gufum.com\",\r\n    \"password\": \"password\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/auth/login"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "137"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"89-np4yYdILQQXEflsZibGTVQKS8nQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 10:22:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"errors\": [\n        {\n            \"value\": \"@gufum.com\",\n            \"property\": \"email\",\n            \"children\": [],\n            \"constraints\": {\n                \"isEmail\": \"Invalid email format / Email is required\"\n            }\n        }\n    ]\n}"
+						},
+						{
+							"name": "User Not Found Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"fake-user@gufum.com\",\r\n    \"password\": \"password\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/auth/login"
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "29"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1d-QBO3n2KR+AbWHh2cmvMh+7ruNHY\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 10:23:37 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User not found!\"\n}"
+						},
+						{
+							"name": "User Login Successful",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"naydecestu@gufum.com\",\r\n    \"password\": \"password\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/auth/login"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "477"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1dd-cACQliyem1kN6tO/DF0h6q8ucbg\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 10:23:57 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"token\": \"string\"\n}"
+						},
+						{
+							"name": "Wrong Password Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"naydecestu@gufum.com\",\r\n    \"password\": \"passwordhh\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/auth/login"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "33"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"21-bnFxfIO4SkQVjFbrqmFkoMoJHeU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 10:24:27 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Incorrect Password!\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Verify User Email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base-url}}auth/verify/OLP9We3N1qdN"
+					},
+					"response": [
+						{
+							"name": "Verify User Account Failed",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:5000/verify/ocfeOjS0uHYo"
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "37"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"25-Q5LZAsKIP3FmwP8FQtQb26pFq9I\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 22 Aug 2023 11:42:48 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid or expired OTP.\"\n}"
+						},
+						{
+							"name": "Verify User Email",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base-url}}auth/verify/ph9KgTT4jGAI"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "516"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"204-IFW4lCnSGPeY2rqSqJUepHv2aM8\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 10:12:42 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User verified successfully\",\n    \"token\": \"string\"\n}"
+						},
+						{
+							"name": "Invalid Verification OTP Error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base-url}}auth/verify/ph9KgTT4jGAIhkhdkjb"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "37"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"25-Q5LZAsKIP3FmwP8FQtQb26pFq9I\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 10:14:23 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid or expired OTP.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Invite Admin User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": ""
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"naydecestu@gufum.com\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base-url}}admin/invite"
+					},
+					"response": [
+						{
+							"name": "No Auth Token While Making Request Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"naydecestu@gufum.com\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base-url}}admin/invite"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2a-39nTrzBhvJ2qtIVuSwBBKwGwbhg\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 10:33:54 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Authorization token required\"\n}"
+						},
+						{
+							"name": "Ordinary User cannot invite Admin",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"naydecestu@gufum.com\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base-url}}admin/invite"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1f-69CIymXiUAqaBFWNyP0QBNHM9eU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 11:11:46 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Permission denied\"\n}"
+						},
+						{
+							"name": "Invite Admin User Successful",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"naydecestu@gufum.com\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base-url}}admin/invite"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"28-xcEyvIMozvgfFmEF7BkFuB3Arfw\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 13:32:35 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Admin invited successfully\"\n}"
+						},
+						{
+							"name": "Inviting non-existent User to Admin Role",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"fake-user@gufum.com\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base-url}}admin/invite"
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "36"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"24-dQ7qDQebbvfP5t+vS4R/Nenb2N4\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 14:57:43 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Account does not exist\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Accept Admin Invite",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}auth/admin/register?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlb2xhYXhvQGdtYWlsLmNvbSIsImlhdCI6MTY5Mjg4MDYwNCwiZXhwIjoxNjkyOTY3MDA0fQ.IggxfDjlbqO7jCOaA2mOYqf39MOGomE1qMqTCRUVleQ",
+							"host": [
+								"{{base-url}}auth"
+							],
+							"path": [
+								"admin",
+								"register"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlb2xhYXhvQGdtYWlsLmNvbSIsImlhdCI6MTY5Mjg4MDYwNCwiZXhwIjoxNjkyOTY3MDA0fQ.IggxfDjlbqO7jCOaA2mOYqf39MOGomE1qMqTCRUVleQ"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Accept Admin Invite Successful",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}auth/admin/register?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlb2xhYXhvQGdtYWlsLmNvbSIsImlhdCI6MTY5Mjg4MDYwNCwiZXhwIjoxNjkyOTY3MDA0fQ.IggxfDjlbqO7jCOaA2mOYqf39MOGomE1qMqTCRUVleQ",
+									"host": [
+										"{{base-url}}auth"
+									],
+									"path": [
+										"admin",
+										"register"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlb2xhYXhvQGdtYWlsLmNvbSIsImlhdCI6MTY5Mjg4MDYwNCwiZXhwIjoxNjkyOTY3MDA0fQ.IggxfDjlbqO7jCOaA2mOYqf39MOGomE1qMqTCRUVleQ"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "43"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2b-aMn3KplaIHHDTDv7asEeTejimSA\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 12:58:42 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User granted admin privileges\"\n}"
+						},
+						{
+							"name": "Invalid Token Error To Accept Admin Invite",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}auth/admin/register?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlb2xhYXhvQGdtYWlsLmNvbSIsImlhdCI6MTY5Mjg4MDYwNCwiZXhwIjoxNjkyOTY3MDA0fQ.IggxfDjlbqO7jCOaA2mOYqf39MOGomE1qMqTCRUVleQhh",
+									"host": [
+										"{{base-url}}auth"
+									],
+									"path": [
+										"admin",
+										"register"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlb2xhYXhvQGdtYWlsLmNvbSIsImlhdCI6MTY5Mjg4MDYwNCwiZXhwIjoxNjkyOTY3MDA0fQ.IggxfDjlbqO7jCOaA2mOYqf39MOGomE1qMqTCRUVleQhh"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1f-4RjKVp8I05+xcnQ5/G16yRoMSKU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 13:03:38 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"invalid signature\"\n}"
+						},
+						{
+							"name": "Re-inviting Admin Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}auth/admin/register?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlb2xhYXhvQGdtYWlsLmNvbSIsImlhdCI6MTY5Mjg4MDYwNCwiZXhwIjoxNjkyOTY3MDA0fQ.IggxfDjlbqO7jCOaA2mOYqf39MOGomE1qMqTCRUVleQ",
+									"host": [
+										"{{base-url}}auth"
+									],
+									"path": [
+										"admin",
+										"register"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlb2xhYXhvQGdtYWlsLmNvbSIsImlhdCI6MTY5Mjg4MDYwNCwiZXhwIjoxNjkyOTY3MDA0fQ.IggxfDjlbqO7jCOaA2mOYqf39MOGomE1qMqTCRUVleQ"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "38"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"26-iRYWSEubaDRFF1bkX9SlbVFFWaM\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 13:06:32 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User is already an admin\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Restore User Account",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}auth/users/restore?email=puffnnrnxamict@pretreer.com",
+							"host": [
+								"{{base-url}}auth"
+							],
+							"path": [
+								"users",
+								"restore"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "puffnnrnxamict@pretreer.com"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Account Restoration Successful",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}auth/users/restore?email=puffnnrnxamict@pretreer.com",
+									"host": [
+										"{{base-url}}auth"
+									],
+									"path": [
+										"users",
+										"restore"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "puffnnrnxamict@pretreer.com"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "171"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"ab-RaO9OCdwMLs6FuCtX4hD2eni7gM\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 14:49:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User account restored\",\n    \"user\": {\n        \"id\": 13,\n        \"email\": \"puffnnrnxamict@pretreer.com\",\n        \"fullName\": \"Test user\",\n        \"isVerified\": true,\n        \"dateJoined\": \"2023-08-24T14:27:42.312Z\"\n    }\n}"
+						},
+						{
+							"name": "Restoring Undeleted Account Error",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}auth/users/restore?email=puffnnrnxamict@pretreer.com",
+									"host": [
+										"{{base-url}}auth"
+									],
+									"path": [
+										"users",
+										"restore"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "puffnnrnxamict@pretreer.com"
+										}
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2a-QxXKEdQZNAncl7rNXN8r3jgbj78\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 14:52:55 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User account was not deleted\"\n}"
+						}
+					]
+				}
+			],
+			"description": "This folder contains all authorization requests:\n\n- Signup\n- Email verification\n- Login\n- Admin Registration\n    \n- Restore User account",
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Files",
+			"item": [
+				{
+					"name": "Upload File",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/user/Documents/Self Discipline.txt"
+								}
+							]
+						},
+						"url": "http://localhost:5000/file/upload"
+					},
+					"response": [
+						{
+							"name": "User Upload File Successful",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/user/Documents/MECH.pdf"
+										}
+									]
+								},
+								"url": "http://localhost:5000/file/upload"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "281"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"119-i849rTtrRgwoMtGQiOq6iE8/F1Q\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 14:35:02 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"SUCCESSFUL\",\n    \"file\": {\n        \"id\": 7,\n        \"slug\": \"idKxR3\",\n        \"fileUrl\": \"string url\",\n        \"originalFileName\": \"MECH.pdf\",\n        \"dateUploaded\": \"2023-08-24T14:35:02.314Z\",\n        \"fileType\": \"application/pdf\",\n        \"isUnsafe\": false\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "View User's Files",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/file/"
+					},
+					"response": [
+						{
+							"name": "Get User's Files Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/file/"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "263"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"107-q+B3aeLcCJD6s5LiF/TsNWrSf8k\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 15:16:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"files\": [\n        [\n            {\n                \"id\": 7,\n                \"slug\": \"idKxR3\",\n                \"fileUrl\": \"https://res.cloudinary.com/ddgm9zdnr/raw/upload/v1692887586/documents/jvj3jrlh4tduoqo5zeqi.pdf\",\n                \"originalFileName\": \"MECH.pdf\",\n                \"dateUploaded\": \"2023-08-24T14:35:02.314Z\",\n                \"fileType\": \"application/pdf\",\n                \"isUnsafe\": false\n            }\n        ]\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get File By Slug",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base-url}}file/idKxR3"
+					},
+					"response": [
+						{
+							"name": "Get File By Slug Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base-url}}file/idKxR3"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "258"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"102-CT8ipbL9quVEE+L2lonEPEynDZs\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 18:12:31 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"file\": {\n        \"id\": 7,\n        \"slug\": \"idKxR3\",\n        \"fileUrl\": \"https://res.cloudinary.com/ddgm9zdnr/raw/upload/v1692887586/documents/jvj3jrlh4tduoqo5zeqi.pdf\",\n        \"originalFileName\": \"MECH.pdf\",\n        \"dateUploaded\": \"2023-08-24T14:35:02.314Z\",\n        \"fileType\": \"application/pdf\",\n        \"isUnsafe\": false\n    }\n}"
+						},
+						{
+							"name": "File Not Found Error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base-url}}file/idKxR33"
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "29"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1d-UDllcX3nJ+KOLFty9z3trdN0J5Q\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 18:12:53 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"File not found!\"\n}"
+						}
+					]
+				}
+			],
+			"description": "This folder contains all file requests:\n\n- Upload file\n    \n- View user's files\n    \n- Find file",
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "{{USER_TOKEN}}"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"password\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base-url}}user/delete/7"
+					},
+					"response": [
+						{
+							"name": "Delete User Account Successful",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"password\": \"password\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base-url}}user/delete/9"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "44"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2c-lDakN4h1ROxPNgw/MajaVw2MeJY\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 14:26:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User account has been deleted!\"\n}"
+						},
+						{
+							"name": "User Trying to Delete Another User Account Error",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"password\": \"password\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base-url}}user/delete/8"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "32"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"20-MtaZ6lmqfSXiBCB0Qr0nPKc8bGQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 14:28:43 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Method not allowed\"\n}"
+						},
+						{
+							"name": "Admin Can Delete User Account",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"password\": \"password\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base-url}}user/delete/7"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "44"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2c-lDakN4h1ROxPNgw/MajaVw2MeJY\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 14:33:42 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User account has been deleted!\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Revoke User Sessions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "{{base-url}}user/revoke-sessions"
+					},
+					"response": [
+						{
+							"name": "Revoke Sessions Successful",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": "{{base-url}}user/revoke-sessions"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "30"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1e-/8+CmaOT2h+WOUQ2QAbposOpvjI\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 15:12:20 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Sessions revoked\"\n}"
+						},
+						{
+							"name": "Error while Attempting to Make Request After Session Revoked",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": "{{base-url}}user/revoke-sessions"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "38"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"26-qGda4CmkOXyBKX10kOzdtisBF4I\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 22:04:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Please login to continue\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Current User / User Making Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/user/"
+					},
+					"response": [
+						{
+							"name": "Get Current User Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:5000/user/"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "128"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"80-QnTFFbtUFA7E0iCCiaKTPSl3aOw\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 23:59:36 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"user\": {\n        \"id\": 10,\n        \"email\": \"deolaaxo@gmail.com\",\n        \"fullName\": \"Test user\",\n        \"isVerified\": true,\n        \"dateJoined\": \"2023-08-24T12:24:14.098Z\"\n    }\n}"
+						}
+					]
+				}
+			],
+			"description": "This folder contains all user requests:\n\n- Delete user\n    \n- Revoke user sessions\n    \n- Get current user making request",
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "{{USER_TOKEN}}"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/admin/users/all"
+					},
+					"response": [
+						{
+							"name": "Admin Get All Users Successful",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:5000/admin/users/all"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1749"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"6d5-SLbNAOZQTcTIvGcPXgcmrJbLqyM\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 23:08:12 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"users\": [\n        {\n            \"id\": 8,\n            \"email\": \"string\",\n            \"password\": \"string\",\n            \"fullName\": \"admin\",\n            \"isVerified\": true,\n            \"role\": \"ADMIN\",\n            \"isDeleted\": false,\n            \"isDisabled\": false,\n            \"dateJoined\": \"2023-08-24T10:04:38.448Z\"\n        },\n        {\n            \"id\": 11,\n            \"email\": \"string\",\n            \"password\": \"string\",\n            \"fullName\": \"Test user\",\n            \"isVerified\": true,\n            \"role\": \"ADMIN\",\n            \"isDeleted\": false,\n            \"isDisabled\": false,\n            \"dateJoined\": \"2023-08-24T12:28:46.084Z\"\n        },\n        {\n            \"id\": 10,\n            \"email\": \"string\",\n            \"password\": \"string\",\n            \"fullName\": \"Test user\",\n            \"isVerified\": true,\n            \"role\": \"ADMIN\",\n            \"isDeleted\": false,\n            \"isDisabled\": false,\n            \"dateJoined\": \"2023-08-24T12:24:14.098Z\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "Non Admin Cannot Get All Users",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:5000/admin/users/all"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1f-69CIymXiUAqaBFWNyP0QBNHM9eU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 23:10:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Permission denied\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Files",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/admin/files/all"
+					},
+					"response": [
+						{
+							"name": "Admin Get All Files Successful",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:5000/admin/files/all"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "821"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"335-E89/ssTzI+lz+0VEl4+o8Ry6WPA\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 23:11:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"files\": [\n        {\n            \"id\": 7,\n            \"slug\": \"idKxR3\",\n            \"fileUrl\": \"https://res.cloudinary.com/ddgm9zdnr/raw/upload/v1692887586/documents/jvj3jrlh4tduoqo5zeqi.pdf\",\n            \"originalFileName\": \"MECH.pdf\",\n            \"dateUploaded\": \"2023-08-24T14:35:02.314Z\",\n            \"fileType\": \"application/pdf\",\n            \"isUnsafe\": false,\n            \"unsafeCount\": 0\n        },\n        {\n            \"id\": 8,\n            \"slug\": \"ji0Pqs\",\n            \"fileUrl\": \"https://res.cloudinary.com/ddgm9zdnr/raw/upload/v1692891555/documents/weo3dhr1ttegivlzy6q2.txt\",\n            \"originalFileName\": \"Self Discipline.txt\",\n            \"dateUploaded\": \"2023-08-24T15:41:10.707Z\",\n            \"fileType\": \"text/plain\",\n            \"isUnsafe\": false,\n            \"unsafeCount\": 0\n        },\n        {\n            \"id\": 9,\n            \"slug\": \"TEUVtH\",\n            \"fileUrl\": \"https://res.cloudinary.com/ddgm9zdnr/raw/upload/v1692915844/documents/tlizfhemvqj5h34oqps8.txt\",\n            \"originalFileName\": \"Self Discipline.txt\",\n            \"dateUploaded\": \"2023-08-24T22:25:59.036Z\",\n            \"fileType\": \"text/plain\",\n            \"isUnsafe\": false,\n            \"unsafeCount\": 0\n        }\n    ]\n}"
+						},
+						{
+							"name": "Non Admin Cannot Get All Files",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:5000/admin/files/all"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1f-69CIymXiUAqaBFWNyP0QBNHM9eU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 23:11:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Permission denied\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Mark File As Unsafe",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": "http://localhost:5000/admin/file/mark-unsafe/9"
+					},
+					"response": [
+						{
+							"name": "File Marked Unsafe Success",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:5000/admin/file/mark-unsafe/9"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "35"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"23-Fgv2zWI/d86nA37BXvhXhyzILHQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 23:16:38 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"File marked as unsafe\"\n}"
+						},
+						{
+							"name": "Non Admin Cannot mark file as Unsafe",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:5000/admin/file/mark-unsafe/9"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1f-69CIymXiUAqaBFWNyP0QBNHM9eU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 23:17:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Permission denied\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Disable User Account",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": "http://localhost:5000/admin/disable-user/7"
+					},
+					"response": [
+						{
+							"name": "Non Admin Cannot Disable User Account",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:5000/admin/disable-user/7"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1f-69CIymXiUAqaBFWNyP0QBNHM9eU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 23:20:15 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Permission denied\"\n}"
+						},
+						{
+							"name": "Account Disabled Success",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": "http://localhost:5000/admin/disable-user/7"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "35"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"23-lk3u+GGqkCND3atjPlxHoNaN3V4\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 23:20:53 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User account disabled\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Files of User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/admin/user/13/files"
+					},
+					"response": [
+						{
+							"name": "Get Files of User Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:5000/admin/user/13/files"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "282"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"11a-1Fi2/j87WlQBvGKtvaJawBe/y3Y\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 23:22:28 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"files\": [\n        {\n            \"id\": 9,\n            \"slug\": \"TEUVtH\",\n            \"fileUrl\": \"https://res.cloudinary.com/ddgm9zdnr/raw/upload/v1692915844/documents/tlizfhemvqj5h34oqps8.txt\",\n            \"originalFileName\": \"Self Discipline.txt\",\n            \"dateUploaded\": \"2023-08-24T22:25:59.036Z\",\n            \"fileType\": \"text/plain\",\n            \"isUnsafe\": true,\n            \"unsafeCount\": 1\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get File By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/admin/file/9"
+					},
+					"response": [
+						{
+							"name": "Get File By Id Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:5000/admin/file/8"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "274"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"112-Ksbi4v6RA9MZ8cnpKccV7EmR7Uc\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 23:23:42 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"file\": {\n        \"id\": 7,\n        \"slug\": \"idKxR3\",\n        \"fileUrl\": \"https://res.cloudinary.com/ddgm9zdnr/raw/upload/v1692887586/documents/jvj3jrlh4tduoqo5zeqi.pdf\",\n        \"originalFileName\": \"MECH.pdf\",\n        \"dateUploaded\": \"2023-08-24T14:35:02.314Z\",\n        \"fileType\": \"application/pdf\",\n        \"isUnsafe\": false,\n        \"unsafeCount\": 0\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/admin/user/10"
+					},
+					"response": [
+						{
+							"name": "Find User By Id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:5000/admin/user/10"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "254"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"fe-jhD2S8AQiRv8c2lv644QFTVBwSw\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 23:48:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"user\": {\n        \"id\": 10,\n        \"email\": \"string\",\n        \"password\": \"string\",\n        \"fullName\": \"Test user\",\n        \"isVerified\": true,\n        \"role\": \"ADMIN\",\n        \"isDeleted\": false,\n        \"isDisabled\": false,\n        \"dateJoined\": \"2023-08-24T12:24:14.098Z\"\n    }\n}"
+						},
+						{
+							"name": "Non Admin cannot get user by Id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:5000/admin/user/10"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1f-69CIymXiUAqaBFWNyP0QBNHM9eU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 23:49:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Permission denied\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Send Email To User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"subject\": \"Testing Admin Send mail\",\r\n    \"content\": \"This is an email to send\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/admin/user/10/send-mail"
+					},
+					"response": [
+						{
+							"name": "Sent Email Successfully",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"subject\": \"Testing Admin Send mail\",\r\n    \"content\": \"This is an email to send\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/admin/user/10/send-mail"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "25"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"19-NSYIWNXKvp+sw+xs+Z63Em2lgo4\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Aug 2023 00:01:54 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Email Sent!\"\n}"
+						},
+						{
+							"name": "Non Admin Cannot Send Email",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"subject\": \"Testing Admin Send mail\",\r\n    \"content\": \"This is an email to send\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/admin/user/10/send-mail"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1f-69CIymXiUAqaBFWNyP0QBNHM9eU\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Aug 2023 00:02:20 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Permission denied\"\n}"
+						}
+					]
+				}
+			],
+			"description": "This folder contains all Admin action requests:\n\n- Invite Admin\n    \n- Mark file as unsafe\n    \n- View all users\n    \n- View all files\n    \n- Disable user account\n    \n- Send email to user\n    \n- View user's files\n    \n- Find A File\n    \n- Find a user",
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "{{ADMIN_TOKEN}}"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Folder",
+			"item": [
+				{
+					"name": "Create New Folder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"folderName\": \"Admin Folder\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/folder/create"
+					},
+					"response": [
+						{
+							"name": "Successfully Created Folder",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"folderName\": \"Admin Folder\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/folder/create"
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "182"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b6-febw61hC+CTGvsNAFjdRAodB35Q\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 22:17:22 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Folder created successfully!\",\n    \"folder\": {\n        \"id\": 1,\n        \"name\": \"Admin Folder\",\n        \"slug\": \"pCOdvf\",\n        \"dateUploaded\": \"2023-08-24T22:17:22.506Z\",\n        \"lastEditedOn\": \"2023-08-24T22:17:22.506Z\"\n    }\n}"
+						},
+						{
+							"name": "Create Folder Without Name Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/folder/create"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "32"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"20-xEU4qDu8Id7KdmcRUbczmL/POHs\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 22:18:01 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing name field\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Find Folder By Slug",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/folder/get/pCOdvf"
+					},
+					"response": [
+						{
+							"name": "Find Folder Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:5000/folder/get/pCOdvf"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "141"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"8d-a0TjbLtsXe9AckGv6tjxaU6q7H4\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 22:22:11 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"folder\": {\n        \"id\": 1,\n        \"name\": \"Admin Folder\",\n        \"slug\": \"pCOdvf\",\n        \"dateUploaded\": \"2023-08-24T22:17:22.506Z\",\n        \"lastEditedOn\": \"2023-08-24T22:17:22.506Z\"\n    }\n}"
+						},
+						{
+							"name": "Folder Not Found Error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:5000/folder/get/pCOdvfgh"
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1f-Wau1TzJi3CQiftkfBY7pzTzEYTk\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 22:22:33 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Folder not found!\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Add File To Folder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:5000/folder/1/add/9"
+					},
+					"response": [
+						{
+							"name": "Add File To Folder",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": "http://localhost:5000/folder/1/add/9"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "141"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"8d-ogFVt+EpR+xmueDwch28C719TPQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 22:26:10 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"folder\": {\n        \"id\": 1,\n        \"name\": \"Admin Folder\",\n        \"slug\": \"pCOdvf\",\n        \"dateUploaded\": \"2023-08-24T22:17:22.506Z\",\n        \"lastEditedOn\": \"2023-08-24T22:26:10.366Z\"\n    }\n}"
+						},
+						{
+							"name": "Readding file to folder Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": "http://localhost:5000/folder/1/add/9"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "47"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2f-8J/1h1M2llRp1UmZSdtFgGpOg8g\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 22:36:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"File already exists in the folder\"\n}"
+						}
+					]
+				},
+				{
+					"name": "View Folder Files",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/folder/1/files"
+					},
+					"response": [
+						{
+							"name": "View Files In Folder Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:5000/folder/1/files"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "269"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"10d-eShYVLCiDUUnOVq6msN4Tf4V93w\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Aug 2023 22:39:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"files\": [\n        [\n            {\n                \"id\": 9,\n                \"slug\": \"TEUVtH\",\n                \"fileUrl\": \"https://res.cloudinary.com/ddgm9zdnr/raw/upload/v1692915844/documents/tlizfhemvqj5h34oqps8.txt\",\n                \"originalFileName\": \"Self Discipline.txt\",\n                \"dateUploaded\": \"2023-08-24T22:25:59.036Z\",\n                \"fileType\": \"text/plain\",\n                \"isUnsafe\": false\n            }\n        ]\n    ]\n}"
+						}
+					]
+				}
+			],
+			"description": "This folder contains all Folder requests:\n\n- Create Folder\n    \n- Add file to folder\n    \n- Get files in folder\n    \n- Find folder",
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "{{USER_TOKEN}}"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base-url",
+			"value": "http://localhost:5000/"
+		}
+	]
+}

@@ -8,9 +8,10 @@ import adminRouter from "./controller/adminController";
 import userRouter from "./controller/userController";
 import {adminVerification, authVerification} from "./configAndUtils/middleware";
 import {globalExceptionHandler} from "./exceptions/GlobalExceptionHandler";
+import {connectToDatabase} from "./database";
 
 
-const app = express();
+export const app = express();
 app.use(express.json());
 
 
@@ -123,7 +124,8 @@ app.use(globalExceptionHandler);
 
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`Server is running on port ${PORT}`);
+    await connectToDatabase();
 });
 
