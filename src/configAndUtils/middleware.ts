@@ -7,7 +7,6 @@ import {myDataSource} from "../database";
 import {UnauthorizedException} from "../exceptions/UnauthorizedException";
 import {InvalidOtpException} from "../exceptions/InvalidOtpException";
 import {globalExceptionHandler} from "../exceptions/GlobalExceptionHandler";
-import {CloudServerException} from "../exceptions/GlobalException";
 
 
 dotenv.config();

@@ -13,6 +13,8 @@ dotenv.config();
 const adminRouter = Router();
 const transporter = require('../configAndUtils/emailConfig');
 const secretKey = process.env.JWT_SECRET || '';
+const hostUrl = process.env.EXTERNAL_URL || 'https://cloud-backup-server-production.up.railway.app';
+
 
 export async function inviteAdmin(email: string) {
     if (!email) {
@@ -30,7 +32,7 @@ export async function inviteAdmin(email: string) {
     }
 
     const token = jwt.sign({ email }, secretKey, { expiresIn: '24h' });
-    const invitationLink = `http://localhost:5000/admin/register?token=${token}`;
+    const invitationLink = `${hostUrl}/admin/register?token=${token}`;
 
     const mailOptions = {
         from: '"Cloud Backup Admin" <cloud-backup@gmail.com>',

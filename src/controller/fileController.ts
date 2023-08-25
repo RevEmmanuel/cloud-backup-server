@@ -25,7 +25,7 @@ filesRouter.get('/', async (req: any, res, next) => {
         const user = req.user.user;
         const files = await getAllFilesForUser(user);
         const fileResponses = await convertFilesToFileResponse(files);
-        res.status(200).json({ files: files });
+        res.status(200).json({ files: fileResponses });
     } catch (error) {
         next(error);
     }
