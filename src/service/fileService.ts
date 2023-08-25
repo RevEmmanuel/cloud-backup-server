@@ -3,7 +3,6 @@ import {File} from "../data/entities/File";
 import {User} from "../data/entities/User"
 import {Folder} from "../data/entities/Folder";
 import {FileNotFoundException} from "../exceptions/FileNotFoundException";
-import {UnauthorizedException} from "../exceptions/UnauthorizedException";
 import path from "path";
 import fs from "fs";
 import cloudinary from "../configAndUtils/cloudinaryConfig";

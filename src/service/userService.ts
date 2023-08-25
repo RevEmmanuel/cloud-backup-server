@@ -5,10 +5,10 @@ import {UserNotFoundException} from "../exceptions/UserNotFoundException";
 import {UnauthorizedException} from "../exceptions/UnauthorizedException";
 import {IncorrectPasswordException} from "../exceptions/IncorrectPasswordException";
 import {Session} from "../data/entities/Session";
-import {FileNotFoundException} from "../exceptions/FileNotFoundException";
 
 
 const transporter = require('../configAndUtils/emailConfig');
+const hostUrl = process.env.EXTERNAL_URL || 'https://cloud-backup-server-production.up.railway.app';
 
 
 export async function deleteUser(id: number, password: string, userMakingRequest: User) {
@@ -48,7 +48,7 @@ export async function deleteUser(id: number, password: string, userMakingRequest
         <br />
         <br />
         <p>Please click the link below to restore your account:</p>
-        <a href="http://localhost:5000/auth/users/${user.email}/restore" target="_blank">Restore my account</a>
+        <a href="${hostUrl}/auth/users/${user.email}/restore" target="_blank">Restore my account</a>
         <p>If that doesn't work, copy the link below and paste in your browser:</p>
         <p>http://localhost:5000/auth/users/${user.email}/restore</p>
         <p>Valid for 30 days</p>
