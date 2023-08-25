@@ -11,7 +11,7 @@ const dataSourceOptions: DataSourceOptions = {
     database: process.env.DB_NAME,
     synchronize: true,
     logging: true,
-    entities: [__dirname + '/entities/*.js'],
+    entities: [__dirname + '/data/entities/*.js'],
 };
 
 export const myDataSource = new DataSource(dataSourceOptions);
