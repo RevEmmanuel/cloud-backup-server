@@ -9,6 +9,8 @@ import userRouter from "./controller/userController";
 import {adminVerification, authVerification} from "./configAndUtils/middleware";
 import {globalExceptionHandler} from "./exceptions/GlobalExceptionHandler";
 import {connectToDatabase} from "./database";
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from "./configAndUtils/swaggerConfig";
 
 
 export const app = express();
@@ -111,6 +113,7 @@ app.get('/', (req, res) => {
     res.send(introHtmlContent);
 });
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/auth', authRouter);
 app.use('/user', authVerification, userRouter);

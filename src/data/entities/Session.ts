@@ -7,7 +7,9 @@ export class Session {
     @PrimaryGeneratedColumn()
     'id': number
 
-    @ManyToOne(() => User)
+    @ManyToOne(() => User, {
+        nullable: true
+    })
     'user': User;
 
     @Column()

@@ -39,7 +39,6 @@ export async function createNewUser(dto: SignUpRequest) {
     const createdUser = await userRepository.save(newUser);
 
     const otp = await otpGenerator.generate(12, { upperCase: false, specialChars: false });
-    console.log('Generated OTP:', otp);
     await storeOTPInDatabase(email, otp);
 
     const mailOptions = {
@@ -116,33 +115,6 @@ export async function loginUser(dto: LoginRequest) {
     return token;
 }
 
-export async function restoreUserEmail(email: string) {
-    const user = await userRepository.findOne({ where: { email } });
-    if (!user) {
-        throw new UserNotFoundException('User not found!');
-    }
-    if (!user.isDeleted) {
-        throw new UnauthorizedException('User account was not deleted');
-    }
-    user.isDeleted = false;
-    return await userRepository.save(user);
-}
-
-export async function registerAdmin(email: string) {
-    const user = await userRepository.findOneBy( { email });
-    if (!user) {
-        throw new UserNotFoundException('User not registered!');
-    }
-    if (user.isDisabled) {
-        throw new AccountDisabledException('Account disabled!')
-    }
-    if (user.role === 'ADMIN') {
-        throw new CloudServerException('User is already an admin', 400);
-    }
-    user.role = 'ADMIN';
-    await userRepository.save(user);
-}
-
 
 export async function verifyUser(otp: string) {
     const foundOtp = await otpRepository.findOne({ where: { otp } });
@@ -200,6 +172,35 @@ export async function verifyUser(otp: string) {
 }
 
 
+export async function restoreUserEmail(email: string) {
+    const user = await userRepository.findOne({ where: { email } });
+    if (!user) {
+        throw new UserNotFoundException('User not found!');
+    }
+    if (!user.isDeleted) {
+        throw new UnauthorizedException('User account was not deleted');
+    }
+    user.isDeleted = false;
+    return await userRepository.save(user);
+}
+
+
+export async function registerAdmin(email: string) {
+    const user = await userRepository.findOneBy( { email });
+    if (!user) {
+        throw new UserNotFoundException('User not registered!');
+    }
+    if (user.isDisabled) {
+        throw new AccountDisabledException('Account disabled!')
+    }
+    if (user.role === 'ADMIN') {
+        throw new CloudServerException('User is already an admin', 400);
+    }
+    user.role = 'ADMIN';
+    await userRepository.save(user);
+}
+
+
 async function createUserFromDto(dto: SignUpRequest) {
     const email = dto.email;
     const password = dto.password;
@@ -221,7 +222,7 @@ async function createUserFromDto(dto: SignUpRequest) {
 }
 
 
-async function storeOTPInDatabase(ownerEmail: string, otp: string) {
+export async function storeOTPInDatabase(ownerEmail: string, otp: string) {
     const currentTime = new Date();
     const expiresAt = new Date(currentTime);
     expiresAt.setHours(currentTime.getHours() + 24)
@@ -231,7 +232,7 @@ async function storeOTPInDatabase(ownerEmail: string, otp: string) {
         otp,
         expiresAt,
     });
-    await otpRepository.save(newOtp);
+    return await otpRepository.save(newOtp);
 }
 
 

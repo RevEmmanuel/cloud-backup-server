@@ -14,7 +14,6 @@ const dataSourceOptions: DataSourceOptions = {
     entities: [__dirname + '/data/entities/*.js', __dirname + '/data/entities/*.ts'],
 };
 
-console.log( __dirname + '/data/entities/*.ts')
 
 export const myDataSource = new DataSource(dataSourceOptions);
 
