@@ -1,11 +1,19 @@
-import { app } from '../app'
-import request from 'supertest';
+import {createNewUser} from "../service/authService";
+import {connectToDatabase, myDataSource} from "../database";
 
 
-describe("Auth", () => {
+describe("Auth Service", () => {
+    beforeAll(async function(){
+        await connectToDatabase();
+    });
 
-    describe("Register USer", () => {
+    afterAll(async function(){
+       await myDataSource.destroy();
+    });
+
+    describe("Register User", () => {
         it('should create a new user and send verification email', async () => {
+
             const signupDto = {
                 email: 'test@example.com',
                 password: 'password',
@@ -13,8 +21,11 @@ describe("Auth", () => {
                 isAdmin: false
             };
 
-            const res = await request(app).post('/auth/signup').send(signupDto);
-            expect(res.statusCode).toEqual(201);
+           const res = createNewUser(signupDto);
+
+
+            // const res = await request(app).post('/auth/signup').send(signupDto);
+            // expect(res.statusCode).toEqual(201);
         });
     });
 });

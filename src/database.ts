@@ -11,20 +11,21 @@ const dataSourceOptions: DataSourceOptions = {
     database: process.env.DB_NAME,
     synchronize: true,
     logging: false,
-    entities: [__dirname + '/data/entities/*.js'],
+    entities: [__dirname + '/data/entities/*.js', __dirname + '/data/entities/*.ts'],
 };
+
+console.log( __dirname + '/data/entities/*.ts')
 
 export const myDataSource = new DataSource(dataSourceOptions);
 
 
 export async function connectToDatabase() {
-    myDataSource
-        .initialize()
-        .then(() => {
-            console.log('Connected to database');
-        })
-        .catch(error => {
-            console.error('Database connection error:', error);
-        });
+   try {
+       await myDataSource
+           .initialize()
+       console.log('Connected to database');
+   }catch (error) {
+       console.error('Database connection error:', error);
+   }
 }
 
