@@ -55,8 +55,8 @@ export async function uploadFileForUser(req: any) {
                 result = await cloudinary.uploader.upload_large(bufferNew, { resource_type: 'raw' });
             }
         }
-    } catch (error) {
-        console.error(error);
+    } catch (error: any) {
+        console.error(error.message);
         throw new UploadException('File upload failed');
     } finally {
         fs.unlinkSync(bufferNew);
