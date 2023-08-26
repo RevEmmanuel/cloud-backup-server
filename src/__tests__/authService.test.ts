@@ -11,22 +11,21 @@ import {UnauthorizedException} from "../exceptions/UnauthorizedException";
 
 
 describe("Auth Service", () => {
-    beforeEach(async function(){
+    beforeAll(async function(){
         await connectToDatabase();
     });
+    afterAll(async function(){
+        await myDataSource.destroy();
+    });
     describe("Register User", () => {
-        afterAll(async function(){
-            await myDataSource.destroy();
-        });
         const random = getRandomValue();
+        const signupDto = {
+            email: `test-${random}@example.com`,
+            password: 'password',
+            fullName: 'Test User',
+            isAdmin: false
+        };
         it('Should create a new user and send verification email', async () => {
-            const signupDto = {
-                email: `test-${random}@example.com`,
-                password: 'password',
-                fullName: 'Test User',
-                isAdmin: false
-            };
-
            const res = await createNewUser(signupDto);
             expect(res.email).toEqual(signupDto.email);
             expect(res.fullName).toEqual(signupDto.fullName);
@@ -34,15 +33,7 @@ describe("Auth Service", () => {
         });
 
         it('Should not create a new user with the same email', async () => {
-            const signupDto = {
-                email: `test-${random}@example.com`,
-                password: 'password',
-                fullName: 'Test User',
-                isAdmin: false
-            };
-
             expect.assertions(3);
-
             try {
                 await createNewUser(signupDto);
             } catch (error: any) {
@@ -56,9 +47,6 @@ describe("Auth Service", () => {
 
 
     describe("User Login", () => {
-        afterAll(async function(){
-            await myDataSource.destroy();
-        });
         const random = getRandomValue();
         it('User should be able to login', async () => {
             const signupDto = {
@@ -137,10 +125,10 @@ describe("Auth Service", () => {
                 password: 'password',
             };
 
-            expect.assertions(3);
+            await createNewUser(signupDto);
 
+            expect.assertions(3);
             try {
-                await createNewUser(signupDto);
                 await loginUser(loginRequest);
             } catch (error: any) {
                 expect(error).toBeInstanceOf(AccountNotVerifiedException);
@@ -203,9 +191,6 @@ describe("Auth Service", () => {
 
 
     describe("Restore user email", () => {
-        afterAll(async function(){
-            await myDataSource.destroy();
-        });
         const random = getRandomValue();
 
         it('Deleted user can restore account', async () => {
@@ -268,9 +253,6 @@ describe("Auth Service", () => {
 
 
     describe("Create Admin User", () => {
-        afterAll(async function(){
-            await myDataSource.destroy();
-        });
         const random = getRandomValue();
         it('Should create a new admin user and send verification email', async () => {
             const signupDto = {
@@ -336,9 +318,6 @@ describe("Auth Service", () => {
 
 
     describe('DTO Conversion', () => {
-        afterAll(async function(){
-            await myDataSource.destroy();
-        });
         it('SignupRequest can be converted to User object', async () => {
             const random = getRandomValue();
             const signupDto = {
@@ -351,16 +330,12 @@ describe("Auth Service", () => {
             const res = await createNewUser(signupDto);
             expect(res.email).toEqual(signupDto.email);
             expect(res.fullName).toEqual(signupDto.fullName);
-            // expect(res.password).toEqual(bcrypt.hash(signupDto.password, 10));
             expect(res.role).toEqual('USER');
         });
     });
 
 
     describe('Store OTP In Database', () => {
-        afterAll(async function(){
-            await myDataSource.destroy();
-        });
 
         it('Should store OTP in the database', async () => {
             const random = getRandomValue();

@@ -17,6 +17,16 @@ export const app = express();
 app.use(express.json());
 
 
+
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Landing Page
+ *     responses:
+ *       200:
+ *         description: The default page for the app
+ */
 app.get('/', (req, res) => {
     const introHtmlContent = `
     <!DOCTYPE html>

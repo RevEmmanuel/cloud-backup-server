@@ -31,6 +31,10 @@ export async function deleteUser(id: number, password: string, userMakingRequest
         throw new IncorrectPasswordException('Incorrect Password!');
     }
 
+    if (user.isDeleted) {
+        throw new UnauthorizedException('Account does not exist');
+    }
+
     user.isDeleted = true;
     await userRepository.save(user);
 
@@ -64,9 +68,13 @@ export async function deleteUser(id: number, password: string, userMakingRequest
     });
 }
 
+
 export async function revokeUserSessions(user: User) {
     const sessionRepository = myDataSource.getRepository(Session);
     const tokens = await sessionRepository.find({ where: { user: { id: user.id } } });
+    if (tokens.length === 0) {
+        throw new UnauthorizedException('No active sessions found');
+    }
     try {
         for (const token of tokens) {
             await sessionRepository.remove(token);
