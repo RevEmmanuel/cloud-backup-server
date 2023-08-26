@@ -25,6 +25,36 @@ const validationOptions = {
 };
 
 
+
+/**
+ * @swagger
+ * /auth/signup:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/SignupRequest'
+ *     responses:
+ *       201:
+ *         description: User registered successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 createdUser:
+ *                   $ref: '#/components/schemas/CreateUserResponse'
+ *       400:
+ *         description: Bad request, validation errors in signup data
+ *       500:
+ *         description: Internal server error
+ */
 authRouter.post('/signup', async (req, res, next) => {
     try {
         const signupDto = plainToInstance(SignupRequest, req.body);
@@ -42,6 +72,51 @@ authRouter.post('/signup', async (req, res, next) => {
 });
 
 
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Login user
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginRequest'
+ *     responses:
+ *       200:
+ *         description: Successful login
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Bad request, validation errors
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       property:
+ *                         type: string
+ *                       constraints:
+ *                         type: string
+ *       401:
+ *         description: Unauthorized, incorrect credentials
+ *       403:
+ *         description: Forbidden, account not verified or disabled
+ *       500:
+ *         description: Internal server error
+ */
 authRouter.post('/login', async (req, res, next) => {
     const loginDto = plainToInstance(LoginRequest, req.body);
     const validationErrors = await validate(loginDto, validationOptions);
@@ -57,6 +132,36 @@ authRouter.post('/login', async (req, res, next) => {
 });
 
 
+/**
+ * @swagger
+ * /auth/verify/{otp}:
+ *   get:
+ *     summary: Verify user using OTP
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: path
+ *         name: otp
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The OTP to verify user's email
+ *     responses:
+ *       200:
+ *         description: User verified successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 authRouter.get('/verify/:otp', async (req, res, next) => {
     try {
         const otp = req.params.otp;
@@ -68,6 +173,37 @@ authRouter.get('/verify/:otp', async (req, res, next) => {
 });
 
 
+
+/**
+ * @swagger
+ * /auth/users/restore:
+ *   put:
+ *     summary: Restore user account using email
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: query
+ *         name: email
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The email of the user to restore
+ *     responses:
+ *       200:
+ *         description: User account restored
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 user:
+ *                   $ref: '#/components/schemas/CreateUserResponse' # Update with the correct schema reference
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 authRouter.put('/users/restore', async (req, res, next) => {
     const { email }  = req.query;
     if (!email) {
@@ -84,6 +220,27 @@ authRouter.put('/users/restore', async (req, res, next) => {
 });
 
 
+/**
+ * @swagger
+ * /auth/admin/register:
+ *   post:
+ *     summary: Register a user as an admin
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: JWT token for admin registration
+ *     responses:
+ *       200:
+ *         description: User granted admin privileges
+ *       400:
+ *         description: Bad request or missing email field
+ *       500:
+ *         description: Internal server error or missing JWT secret key
+ */
 authRouter.post('/admin/register', async (req: any, res, next) => {
     const secretKey = process.env.JWT_SECRET;
     if (!secretKey) {

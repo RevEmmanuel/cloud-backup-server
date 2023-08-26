@@ -105,6 +105,7 @@ app.get('/', (req, res) => {
     <h2>Documentation</h2>
     <p>The API documentation is available through Postman. You can access it using the following link:</p>
     <p><a href="https://bit.ly/cloud-backup-server" target="_blank">Postman Documentation</a></p>
+    <p><a href="https://cloud-backup-server-production.up.railway.app/api-docs" target="_blank">Swagger Documentation</a></p>
     
     <div class="developer">
         <h2>Developer & Engineer</h2>
