@@ -6,6 +6,8 @@ COPY package*.json ./
 
 RUN npm install
 
+RUN tsc
+
 # Copy the necessary files for production build
 COPY package*.json ./
 COPY tsconfig.json ./
