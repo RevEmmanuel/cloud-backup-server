@@ -20,6 +20,31 @@ async function convertFilesToFileResponse(foundFiles: File[]) {
 }
 
 
+/**
+ * @swagger
+ * /files:
+ *   get:
+ *     summary: Get all files for the authenticated user
+ *     tags: [Files]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved the list of files
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 files:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/FileResponse' # Update with the correct schema reference
+ *       401:
+ *         description: Unauthorized, missing or invalid token
+ *       500:
+ *         description: Internal server error
+ */
 filesRouter.get('/', async (req: any, res, next) => {
     try {
         const user = req.user.user;
@@ -32,6 +57,44 @@ filesRouter.get('/', async (req: any, res, next) => {
 });
 
 
+
+/**
+ * @swagger
+ * /files/upload:
+ *   post:
+ *     summary: Upload a file
+ *     tags: [Files]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: File upload successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 file:
+ *                   $ref: '#/components/schemas/FindFileResponse' # Update with the correct schema reference
+ *       400:
+ *         description: Bad request, no file uploaded
+ *       401:
+ *         description: Unauthorized, missing or invalid token
+ *       500:
+ *         description: Internal server error
+ */
 filesRouter.post('/upload', upload.single('file'), async (req, res, next) => {
     try {
         if (!req.file) {
@@ -47,6 +110,37 @@ filesRouter.post('/upload', upload.single('file'), async (req, res, next) => {
 });
 
 
+/**
+ * @swagger
+ * /files/{slug}:
+ *   get:
+ *     summary: Get file by slug
+ *     tags: [Files]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: slug
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: File retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 file:
+ *                   $ref: '#/components/schemas/FindFileResponse' # Update with the correct schema reference
+ *       401:
+ *         description: Unauthorized, missing or invalid token
+ *       404:
+ *         description: File not found
+ *       500:
+ *         description: Internal server error
+ */
 filesRouter.get('/:slug', async (req: any, res, next) => {
     try {
         const { slug } = req.params;

@@ -9,6 +9,40 @@ import {UserNotFoundException} from "../exceptions/UserNotFoundException";
 const userRouter = Router();
 
 
+/**
+ * @swagger
+ * /user/delete/{userId}:
+ *   delete:
+ *     summary: Delete a user account
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the user to be deleted
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *             required:
+ *               - password
+ *     responses:
+ *       200:
+ *         description: User account has been deleted
+ *       400:
+ *         description: Bad request, missing fields or invalid input
+ *       401:
+ *         description: Unauthorized, user doesn't have permission to delete
+ *       500:
+ *         description: Internal server error
+ */
 userRouter.delete('/delete/:userId', async (req: any, res, next) => {
     const { userId } = req.params;
     const { password } = req.body;
@@ -36,6 +70,22 @@ userRouter.delete('/delete/:userId', async (req: any, res, next) => {
 });
 
 
+/**
+ * @swagger
+ * /user/revoke-sessions:
+ *   post:
+ *     summary: Revoke all sessions for the authenticated user
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User sessions revoked successfully
+ *       401:
+ *         description: Unauthorized, missing or invalid token
+ *       500:
+ *         description: Internal server error
+ */
 userRouter.post('/revoke-sessions', async (req: any, res, next) => {
     const user = req.user.user;
     try {
@@ -48,6 +98,31 @@ userRouter.post('/revoke-sessions', async (req: any, res, next) => {
 });
 
 
+/**
+ * @swagger
+ * /user:
+ *   get:
+ *     summary: Get user's own profile information
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved user's profile
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/CreateUserResponse'
+ *       401:
+ *         description: Unauthorized, missing or invalid token
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
 userRouter.get('/', async (req: any, res, next) => {
     try {
         const user = req.user.user;

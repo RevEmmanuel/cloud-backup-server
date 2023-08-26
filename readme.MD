@@ -19,9 +19,13 @@ This ia a Nodejs (Typescript and Express) server application that serves as a cl
 ### Technologies used:
 * `NodeJs (TypeScript & Express)`
 * `PostgreSQL`
-* `Cloudinary`
+* `Cloudinary as a shared cloud storage provider`
 * `JWT`
 * `Gmail smtp`
+* `Docker`
+* `Postman`
+* `Jest`
+* `Swagger UI`
 
 ### Prerequisites:
 * `npm`
@@ -70,6 +74,9 @@ The application will start running on `http://localhost:5000`.
 ## Documentation
 The API documentation is available through Postman. You can access it using the following link:
 * [Postman Documentation](https://bit.ly/cloud-backup-server)
+* [Swagger Documentation on Local Server](http://localhost:5000/api-docs)
+* [Swagger Documentation on Hosted Server](https://cloud-backup-server-production.up.railway.app/api-docs)
+* [Landing Page](https://cloud-backup-server-production.up.railway.app/)
 
 ## Developer & Engineer
 Adeola Adekunle
