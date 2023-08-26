@@ -9,8 +9,7 @@ RUN npm install
 # Copy the necessary files for production build
 COPY package*.json ./
 COPY tsconfig.json ./
-COPY ormconfig.json ./
-COPY dist/ ./dist/
+COPY dist/* ./dist/
 
 RUN npm run build
 
