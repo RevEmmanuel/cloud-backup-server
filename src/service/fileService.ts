@@ -28,31 +28,39 @@ export async function uploadFileForUser(req: any) {
     const { originalname, buffer, mimetype } = req.file;
     const user = req.user.user;
 
+    if (buffer.length > 200 * 1024 * 1024) {
+        throw new FileNotSupportedException('File size exceeds the limit.');
+    }
+
     let result;
 
     const bufferNew = path.join(originalname);
     fs.writeFileSync(bufferNew, buffer);
 
-    if (mimetype.startsWith('image') || mimetype.startsWith('video') || mimetype.startsWith('audio')) {
+    try {
         if (buffer.length <= 90 * 1024 * 1024) {
-            result = await cloudinary.uploader.upload(bufferNew);
+            if (mimetype.startsWith('image/')) {
+                result = await cloudinary.uploader.upload(bufferNew, { resource_type: 'image' });
+            } else if (mimetype.startsWith('video/')) {
+                result = await cloudinary.uploader.upload(bufferNew, { resource_type: 'video' });
+            } else {
+                result = await cloudinary.uploader.upload(bufferNew, { resource_type: 'raw' });
+            }
         } else {
-            result = await cloudinary.uploader.upload_large(bufferNew, { resource_type: 'auto' });
+            if (mimetype.startsWith('image/')) {
+                result = await cloudinary.uploader.upload_large(bufferNew, { resource_type: 'image' });
+            } else if (mimetype.startsWith('video/')) {
+                result = await cloudinary.uploader.upload_large(bufferNew, { resource_type: 'video' });
+            } else {
+                result = await cloudinary.uploader.upload_large(bufferNew, { resource_type: 'raw' });
+            }
         }
-    } else if (mimetype === 'application/pdf' || mimetype === 'application/msword' || mimetype === 'application/zip' || mimetype === 'text/plain' || mimetype === 'text/csv') {
-        result = await cloudinary.uploader.upload(bufferNew, {
-            resource_type: 'raw',
-            folder: 'documents/',
-        });
-    } else {
-        throw new FileNotSupportedException('File type not supported!');
-    }
-
-    if (!result) {
+    } catch (error) {
+        console.error(error);
         throw new UploadException('File upload failed');
+    } finally {
+        fs.unlinkSync(bufferNew);
     }
-
-    fs.unlinkSync(bufferNew);
 
     const fileRepository = myDataSource.getRepository(File);
     const slug = await slugGenerator.generate(6, { upperCase: false, specialChars: false });

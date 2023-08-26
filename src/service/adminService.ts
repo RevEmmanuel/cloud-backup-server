@@ -10,7 +10,6 @@ import {getFileById} from "./fileService";
 import {FileNotFoundException} from "../exceptions/FileNotFoundException";
 
 dotenv.config();
-const adminRouter = Router();
 const transporter = require('../configAndUtils/emailConfig');
 const secretKey = process.env.JWT_SECRET || '';
 const hostUrl = process.env.EXTERNAL_URL || 'https://cloud-backup-server-production.up.railway.app';
