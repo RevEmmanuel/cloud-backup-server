@@ -15,7 +15,7 @@ import swaggerSpec from "./configAndUtils/swaggerConfig";
 
 export const app = express();
 app.use(express.json());
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 /**
@@ -124,7 +124,6 @@ app.get('/', (req, res) => {
     res.send(introHtmlContent);
 });
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/auth', authRouter);
 app.use('/user', authVerification, userRouter);
