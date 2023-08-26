@@ -72,7 +72,6 @@ export async function markFileAsUnsafe(fileId: number, user: User) {
     file.unsafeCount = file.unsafeCount + 1;
     await fileRepository.save(file);
     if (file.unsafeCount >= 3) {
-        /**
         const fileOwner = file.user;
         const mailOptions = {
             from: '"Cloud Backup Admin" <cloud-backup@gmail.com>',
@@ -92,7 +91,6 @@ export async function markFileAsUnsafe(fileId: number, user: User) {
                 console.log('Email sent:', info.response);
             }
         });
-         **/
         await fileRepository.delete(file);
     }
 }
