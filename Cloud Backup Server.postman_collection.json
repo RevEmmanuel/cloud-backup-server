@@ -408,7 +408,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:5000/auth/login"
+						"url": "{{base-url}}auth/login"
 					},
 					"response": [
 						{
@@ -782,7 +782,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "{{base-url}}auth/verify/OLP9We3N1qdN"
+						"url": {
+							"raw": "{{base-url}}auth/verify/:token",
+							"host": [
+								"{{base-url}}auth"
+							],
+							"path": [
+								"verify",
+								":token"
+							],
+							"variable": [
+								{
+									"key": "token",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": [
 						{
@@ -1354,7 +1369,7 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "{{base-url}}auth/users/restore?email=puffnnrnxamict@pretreer.com",
+							"raw": "{{base-url}}auth/users/restore?email=",
 							"host": [
 								"{{base-url}}auth"
 							],
@@ -1365,7 +1380,7 @@
 							"query": [
 								{
 									"key": "email",
-									"value": "puffnnrnxamict@pretreer.com"
+									"value": ""
 								}
 							]
 						}
@@ -1529,11 +1544,11 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/user/Documents/Self Discipline.txt"
+									"src": "/C:/Users/user/Pictures/Illusion.jpg"
 								}
 							]
 						},
-						"url": "http://localhost:5000/file/upload"
+						"url": "{{base-url}}file/upload"
 					},
 					"response": [
 						{
@@ -1588,6 +1603,165 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"message\": \"SUCCESSFUL\",\n    \"file\": {\n        \"id\": 7,\n        \"slug\": \"idKxR3\",\n        \"fileUrl\": \"string url\",\n        \"originalFileName\": \"MECH.pdf\",\n        \"dateUploaded\": \"2023-08-24T14:35:02.314Z\",\n        \"fileType\": \"application/pdf\",\n        \"isUnsafe\": false\n    }\n}"
+						},
+						{
+							"name": "No File Uploaded Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": "http://localhost:5000/file/upload"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "30"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1e-5LbFWGaOeO8SQPs5WIMB48ywCbg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 14:47:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"No file uploaded\"\n}"
+						},
+						{
+							"name": "Upload File larger than 200mb error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/user/Videos/movies/Cocaine Bear/Cocaine Bear (2023) (NetNaija.com).mkv"
+										}
+									]
+								},
+								"url": "http://localhost:5000/file/upload"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "38"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"26-ltCqelRaqmA2GEo4bmS8LhBj53g\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 14:58:25 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"File type not supported!\"\n}"
+						},
+						{
+							"name": "Upload File",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/user/Videos/Why are you gay video.mp4"
+										}
+									]
+								},
+								"url": "http://localhost:5000/file/upload"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "285"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"11d-K+4Pz7SbyjqG0SMlQrkewt5nnL8\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 15:32:35 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"SUCCESSFUL\",\n    \"file\": {\n        \"id\": 10,\n        \"slug\": \"3IEQQN\",\n        \"fileUrl\": \"https://res.cloudinary.com/ddgm9zdnr/video/upload/v1693063839/uxfoymobeq0hoaxrn7te.mp4\",\n        \"originalFileName\": \"Why are you gay video.mp4\",\n        \"dateUploaded\": \"2023-08-26T15:32:35.328Z\",\n        \"fileType\": \"video/mp4\",\n        \"isUnsafe\": false\n    }\n}"
 						}
 					]
 				},
@@ -1608,7 +1782,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:5000/file/"
+						"url": "{{base-url}}file/"
 					},
 					"response": [
 						{
@@ -1670,7 +1844,21 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "{{base-url}}file/idKxR3"
+						"url": {
+							"raw": "{{base-url}}file/:slug",
+							"host": [
+								"{{base-url}}file"
+							],
+							"path": [
+								":slug"
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": [
 						{
@@ -1807,7 +1995,22 @@
 								}
 							}
 						},
-						"url": "{{base-url}}user/delete/7"
+						"url": {
+							"raw": "{{base-url}}user/delete/:id",
+							"host": [
+								"{{base-url}}user"
+							],
+							"path": [
+								"delete",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": [
 						{
@@ -2069,7 +2272,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/user/"
+						"url": "{{base-url}}user/"
 					},
 					"response": [
 						{
@@ -2154,7 +2357,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/admin/users/all"
+						"url": "{{base-url}}admin/users/all"
 					},
 					"response": [
 						{
@@ -2250,7 +2453,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/admin/files/all"
+						"url": "{{base-url}}admin/files/all"
 					},
 					"response": [
 						{
@@ -2346,7 +2549,23 @@
 					"request": {
 						"method": "PUT",
 						"header": [],
-						"url": "http://localhost:5000/admin/file/mark-unsafe/9"
+						"url": {
+							"raw": "{{base-url}}admin/file/mark-unsafe/:id",
+							"host": [
+								"{{base-url}}admin"
+							],
+							"path": [
+								"file",
+								"mark-unsafe",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": [
 						{
@@ -2442,7 +2661,22 @@
 					"request": {
 						"method": "PUT",
 						"header": [],
-						"url": "http://localhost:5000/admin/disable-user/7"
+						"url": {
+							"raw": "{{base-url}}admin/disable-user/:id",
+							"host": [
+								"{{base-url}}admin"
+							],
+							"path": [
+								"disable-user",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": [
 						{
@@ -2538,7 +2772,23 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/admin/user/13/files"
+						"url": {
+							"raw": "{{base-url}}admin/user/:id/files",
+							"host": [
+								"{{base-url}}admin"
+							],
+							"path": [
+								"user",
+								":id",
+								"files"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": [
 						{
@@ -2591,7 +2841,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/admin/file/9"
+						"url": {
+							"raw": "{{base-url}}admin/file/:id",
+							"host": [
+								"{{base-url}}admin"
+							],
+							"path": [
+								"file",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": [
 						{
@@ -2644,7 +2909,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/admin/user/10"
+						"url": {
+							"raw": "{{base-url}}admin/user/:id",
+							"host": [
+								"{{base-url}}admin"
+							],
+							"path": [
+								"user",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": [
 						{
@@ -2749,7 +3029,23 @@
 								}
 							}
 						},
-						"url": "http://localhost:5000/admin/user/10/send-mail"
+						"url": {
+							"raw": "{{base-url}}admin/user/:id/send-mail",
+							"host": [
+								"{{base-url}}admin"
+							],
+							"path": [
+								"user",
+								":id",
+								"send-mail"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": [
 						{
@@ -2904,7 +3200,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:5000/folder/create"
+						"url": "{{base-url}}folder/create"
 					},
 					"response": [
 						{
@@ -3018,7 +3314,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/folder/get/pCOdvf"
+						"url": {
+							"raw": "{{base-url}}folder/get/:slug",
+							"host": [
+								"{{base-url}}folder"
+							],
+							"path": [
+								"get",
+								":slug"
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": [
 						{
@@ -3114,7 +3425,27 @@
 					"request": {
 						"method": "POST",
 						"header": [],
-						"url": "http://localhost:5000/folder/1/add/9"
+						"url": {
+							"raw": "{{base-url}}folder/:folderId/add/:fileId",
+							"host": [
+								"{{base-url}}folder"
+							],
+							"path": [
+								":folderId",
+								"add",
+								":fileId"
+							],
+							"variable": [
+								{
+									"key": "folderId",
+									"value": ""
+								},
+								{
+									"key": "fileId",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": [
 						{
@@ -3210,7 +3541,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/folder/1/files"
+						"url": {
+							"raw": "{{base-url}}folder/:id/files",
+							"host": [
+								"{{base-url}}folder"
+							],
+							"path": [
+								":id",
+								"files"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": [
 						{
