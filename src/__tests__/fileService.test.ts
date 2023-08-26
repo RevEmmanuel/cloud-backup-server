@@ -7,7 +7,7 @@ import {FileNotFoundException} from "../exceptions/FileNotFoundException";
 import path from "path";
 
 
-describe("File Service", () => {
+describe("File Service Test", () => {
     beforeAll(async function(){
         await connectToDatabase();
     });

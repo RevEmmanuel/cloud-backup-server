@@ -9,7 +9,8 @@ import {Folder} from "../data/entities/Folder";
 import {UnauthorizedException} from "../exceptions/UnauthorizedException";
 import {FolderNotFoundException} from "../exceptions/FolderNotFoundException";
 
-describe("Folder Service", () => {
+
+describe("Folder Service Test", () => {
     beforeAll(async function(){
         await connectToDatabase();
     });
