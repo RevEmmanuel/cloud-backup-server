@@ -10,7 +10,7 @@ import {AccountDisabledException} from "../exceptions/AccountDisabledException";
 import {UnauthorizedException} from "../exceptions/UnauthorizedException";
 
 
-describe("Auth Service", () => {
+describe("Auth Service Test", () => {
     beforeAll(async function(){
         await connectToDatabase();
     });

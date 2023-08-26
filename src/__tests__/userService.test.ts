@@ -1,12 +1,12 @@
 import {connectToDatabase, myDataSource} from "../database";
-import {createNewUser, loginUser, restoreUserEmail} from "../service/authService";
+import {createNewUser, loginUser} from "../service/authService";
 import {UserNotFoundException} from "../exceptions/UserNotFoundException";
 import {User} from "../data/entities/User";
 import {UnauthorizedException} from "../exceptions/UnauthorizedException";
 import {deleteUser, getUserById, revokeUserSessions} from "../service/userService";
 
 
-describe("User Service", () => {
+describe("User Service Test", () => {
     beforeAll(async function(){
         await connectToDatabase();
     });
