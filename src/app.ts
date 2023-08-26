@@ -8,12 +8,25 @@ import adminRouter from "./controller/adminController";
 import userRouter from "./controller/userController";
 import {adminVerification, authVerification} from "./configAndUtils/middleware";
 import {globalExceptionHandler} from "./exceptions/GlobalExceptionHandler";
+import {connectToDatabase} from "./database";
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from "./configAndUtils/swaggerConfig";
 
 
-const app = express();
+export const app = express();
 app.use(express.json());
 
 
+
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Landing Page
+ *     responses:
+ *       200:
+ *         description: The default page for the app
+ */
 app.get('/', (req, res) => {
     const introHtmlContent = `
     <!DOCTYPE html>
@@ -110,6 +123,7 @@ app.get('/', (req, res) => {
     res.send(introHtmlContent);
 });
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/auth', authRouter);
 app.use('/user', authVerification, userRouter);
@@ -123,7 +137,8 @@ app.use(globalExceptionHandler);
 
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`Server is running on port ${PORT}`);
+    await connectToDatabase();
 });
 

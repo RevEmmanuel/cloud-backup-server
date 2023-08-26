@@ -36,6 +36,7 @@ authRouter.post('/signup', async (req, res, next) => {
         const createUserResponse = instanceToPlain(createdUser, { excludeExtraneousValues: true }) as CreateUserResponse;
         res.status(201).json({ message: 'User registered successfully', createdUser: createUserResponse });
     } catch (error) {
+        console.log(error)
         next(error);
     }
 });

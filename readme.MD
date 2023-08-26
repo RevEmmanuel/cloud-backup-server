@@ -7,6 +7,7 @@ This ia a Nodejs (Typescript and Express) server application that serves as a cl
 * `Upload files`
 * `Download Files`
 * `Folders for easy file arrangement`
+* `Unit Tests using jest`
 
 ### Extras
 * `Admin type for content management`
