@@ -34,9 +34,9 @@ export async function createNewFolder(folderName: string, user: User) {
 export async function getFilesInFolder(folderId: number, user: User) {
     const folder = await folderRepository.findOne({ where: { id: folderId, user: { id: user.id } }});
     if (!folder) {
-        throw new FileNotFoundException('File not found');
+        throw new FolderNotFoundException('Folder not found');
     }
-    return  await findFilesByFolder(folder);
+    return await findFilesByFolder(folder);
 }
 
 
@@ -68,7 +68,6 @@ export async function addFileToFolder(folderId: number, fileId: number, user: Us
     const dateUploaded = new Date(currentTime);
     dateUploaded.setDate(currentTime.getDate());
     folder.lastEditedOn = dateUploaded;
-    await folderRepository.save(folder);
-    return folder;
+    return await folderRepository.save(folder);
 }
 

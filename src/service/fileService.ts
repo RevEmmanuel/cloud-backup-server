@@ -94,7 +94,7 @@ export async function saveFile(file: File) {
 }
 
 export async function findFilesByFolder(folder: Folder) {
-    return await fileRepository.find({where: {folder: folder}});
+    return await fileRepository.find({where: {folder: { id: folder.id }}});
 }
 
 
